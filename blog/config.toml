@@ -1,11 +1,13 @@
 baseURL = "https://example.com"
 languageCode = "en"
 DefaultContentLanguage = "en"
-title = "Tom's Blog"
+title = "Tom Meadon"
 theme = "anatole"
 summarylength = 10
 enableEmoji = true
 enableRobotsTXT = true
+pygmentsCodeFences = true
+pygmentsUseClasses = true
 
 # Enable Disqus
 #disqusShortname = ""
@@ -14,22 +16,24 @@ enableRobotsTXT = true
 #googleAnalytics = "UA-123-45"
 
 [params]
-title = "I'm Tom Meadon"
+title = "Tom Meadon"
 author = "Tom Meadon"
-description = "Technical Architect"
+description = "Azure Technical Architect"
 profilePicture = "images/profile.jpg"
 keywords = ""
 favicon = "favicons/"
-customCss = ["css/custom.css"]
+customCss = ["css/custom.css", "css/syntax-native.css"]
 customJs = []
 mainSections = ["posts"]
 images = ["images/site-feature-image.png"]
+# pygmentsCodeFences = true
+# pygmentsUseClasses = true
 # Google Site Verification
 #googleSiteVerify = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 ## Math settings
 [params.math]
-enable = false  # options: true, false. Enable math support globally, default: false. You can always enable math on per page.
+enable = true  # options: true, false. Enable math support globally, default: false. You can always enable math on per page.
 use = "katex"  # options: "katex", "mathjax". default is "katex".
 
 ## Social links
