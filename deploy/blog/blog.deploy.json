@@ -30,8 +30,14 @@
               "apiVersion": "2019-06-01",
               "properties": {
                 "publicAccess": "Container"
-              }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('storageAccountName'), 'default')]"
+              ]
             }
+          ],
+          "dependsOn": [
+            "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
           ]
         }
       ]
