@@ -15,11 +15,11 @@ jobs:
       with:
         hugo-version: '0.75.1'
     - name: Hugo build
-      run: hugo -s ./blog -d ./publish/blog
+      run: hugo -s ./blog
     - name: ls
       run: ls -R
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
-        name: published-sites
-        path: ./publish/
+        name: published-blog
+        path: ./blog/public
