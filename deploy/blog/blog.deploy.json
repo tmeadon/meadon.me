@@ -19,13 +19,13 @@
       },
       "resources": [
         {
-          "name": "default",
+          "name": "[concat(variables('storageAccountName'), '/default')]",
           "type": "Microsoft.Storage/storageAccounts/blobServices",
           "apiVersion": "2019-06-01",
           "properties": {},
           "resources": [
             {
-              "name": "$web",
+              "name": "[concat(variables('storageAccountName'), '/default/$web')]",
               "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
               "apiVersion": "2019-06-01",
               "properties": {
