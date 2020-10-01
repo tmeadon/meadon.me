@@ -40,6 +40,16 @@ jobs:
       with:
         creds: ${{secrets.AZURE_CREDS}}
 
+    - name: Azure create resource group
+      uses: azure/powershell@v1
+      with:
+        inlineScript: |
+          $rgName = "blog"
+          if (-not (Get-AzResourceGroup -ResourceGroupName $rgName -ErrorAction SilentlyContinue))
+          {
+            New-AzResourceGroup -ResourceGroupName $rgName -Location uksouth
+          }
+
     - name: Azure ARM deployment
       uses: azure/arm-deploy@v1
       with:
