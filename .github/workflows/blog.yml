@@ -16,3 +16,8 @@ jobs:
         hugo-version: '0.75.1'
     - name: Hugo build
       run: hugo -s ./blog -d ./publish/blog
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: published-sites
+        path: ./publish/
