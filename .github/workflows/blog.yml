@@ -39,6 +39,7 @@ jobs:
       uses: azure/login@v1.1
       with:
         creds: ${{secrets.AZURE_CREDS}}
+        enable-AzPSSession: true 
 
     - name: Azure create resource group
       uses: azure/powershell@v1
@@ -49,6 +50,7 @@ jobs:
           {
             New-AzResourceGroup -ResourceGroupName $rgName -Location uksouth
           }
+        azPSVersion: '3.1.0'
 
     - name: Azure ARM deployment
       uses: azure/arm-deploy@v1
