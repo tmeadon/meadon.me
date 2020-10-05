@@ -44,12 +44,13 @@ jobs:
     - name: Azure create resource group
       uses: azure/powershell@v1
       with:
-        scriptFile: ./deploy/blog/deploy.ps1
+        inlineScript: |
+          & ./deploy/blog/deploy.ps1
         azPSVersion: '3.1.0'
 
-    - name: Azure ARM deployment
-      uses: azure/arm-deploy@v1
-      with:
-        subscriptionId: ${{secrets.AZURE_SUB_ID}}
-        resourceGroupName: blog
-        template: ./deploy/blog/blog.deploy.json
+    # - name: Azure ARM deployment
+    #   uses: azure/arm-deploy@v1
+    #   with:
+    #     subscriptionId: ${{secrets.AZURE_SUB_ID}}
+    #     resourceGroupName: blog
+    #     template: ./deploy/blog/blog.deploy.json
