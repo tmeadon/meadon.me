@@ -42,7 +42,13 @@
             "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
           ]
         }
-      ]
+      ],
+      "properties": {
+        "customDomain": {
+          "name": "blog.meadon.me",
+          "useSubDomainName": false
+        }
+      }
     }
   ],
   "outputs": {}

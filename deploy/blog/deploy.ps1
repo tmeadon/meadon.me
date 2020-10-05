@@ -1,9 +1,9 @@
 [CmdletBinding()]
 Param ()
 
-$rgName = 'meadonme'
+$rgName = 'blog'
 $rgLocation = 'uksouth'
-$storageAccountName = 'meadonme'
+$storageAccountName = 'blogmeadonme'
 
 # ensure the resource group exists
 if (-not (Get-AzResourceGroup -ResourceGroupName $rgName -ErrorAction SilentlyContinue))
