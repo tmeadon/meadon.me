@@ -22,7 +22,7 @@ Enable-AzStorageStaticWebsite -Context $storageAccount.Context -IndexDocument 'i
 Get-ChildItem -Path '.\deploy\blog\site' -File -Recurse | Set-AzStorageBlobContent -Container '$web' -Context $storageAccount.Context -Force # -Properties @{ ContentType = "text/html; charset=utf-8"; }
 
 # set the content type on the blobs
-Get-AzStorageBlob Get-AzStorageBlob -Container '$web' -Context $storageAccount.Context | ForEach-Object -Parallel {
+Get-AzStorageBlob -Container '$web' -Context $storageAccount.Context | ForEach-Object -Parallel {
 
     $extension = $_.Name.Split('.')[-1]
 
