@@ -39,6 +39,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: published-blog
+        path: deploy/blog/site
 
     - shell: bash
       run: |

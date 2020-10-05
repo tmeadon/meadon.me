@@ -19,4 +19,4 @@ $storageAccount = Get-AzStorageAccount -ResourceGroupName $rgName -AccountName $
 Enable-AzStorageStaticWebsite -Context $storageAccount.Context -IndexDocument 'index.html' -ErrorDocument404Path '404.html' -Verbose
 
 # deploy the files
-Get-ChildItem -Path '.\published-blog' -File -Recurse | Set-AzStorageBlobContent -Container '$web' -Context $storageAccount.Context
+Get-ChildItem -Path '.\deploy\blog\site' -File -Recurse | Set-AzStorageBlobContent -Container '$web' -Context $storageAccount.Context
