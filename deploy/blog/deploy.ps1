@@ -41,3 +41,5 @@ Get-AzStorageBlob -Container '$web' -Context $storageAccount.Context | ForEach-O
     $_.ICloudBlob.SetProperties()
 }
 
+# enable azure storage logging
+Set-AzStorageServiceLoggingProperty -ServiceType Blob -LoggingOperations Read, Write, Delete -RetentionDays 365 -Version 2.0 -Context $storageAccount.Context
