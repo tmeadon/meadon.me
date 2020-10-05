@@ -15,5 +15,8 @@ if (-not (Get-AzResourceGroup -ResourceGroupName $rgName -ErrorAction SilentlyCo
 New-AzResourceGroupDeployment -ResourceGroupName $rgName -TemplateFile $PSScriptRoot\blog.deploy.json -StorageAccountName $storageAccountName -Verbose
 
 # enable static website
-$storageAccount = Get-AzStorageAccount -ResourceGroupName $ResourceGroupName -AccountName $storageAccountName
+$storageAccount = Get-AzStorageAccount -ResourceGroupName $rgName -AccountName $storageAccountName
 Enable-AzStorageStaticWebsite -Context $storageAccount.Context -IndexDocument 'index.html' -ErrorDocument404Path '404.html' -Verbose
+
+# deploy the files
+Get-ChildItem -Path '.\blog\public' -File -Recurse | Set-AzStorageBlobContent -Container '$web' -Context $storageAccount.Context
