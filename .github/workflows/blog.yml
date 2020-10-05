@@ -44,12 +44,7 @@ jobs:
     - name: Azure create resource group
       uses: azure/powershell@v1
       with:
-        inlineScript: |
-          $rgName = "blog"
-          if (-not (Get-AzResourceGroup -ResourceGroupName $rgName -ErrorAction SilentlyContinue))
-          {
-            New-AzResourceGroup -ResourceGroupName $rgName -Location uksouth
-          }
+        scriptFile: ./deploy/blog/deploy.ps1
         azPSVersion: '3.1.0'
 
     - name: Azure ARM deployment
