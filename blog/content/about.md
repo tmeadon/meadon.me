@@ -1,7 +1,7 @@
 ---
 title: "About"
 date: 2020-09-25T13:19:54Z
-draft: true
+draft: false
 ---
 I am a Technical Architect with a primary focus on Microsoft Azure and a penchant for all things PowerShell.  My background is in systems engineering which exposed me to a broad range of technologies, however more recently I have opted to specialise in cloud technology.  I started coding about 5 years ago when I started learning PowerShell to help with my day job, now I strive to spend as much of my day writing code or hacking around on the console as possible.
 
