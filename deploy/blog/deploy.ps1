@@ -32,5 +32,5 @@ Get-ChildItem -Path '.\deploy\blog\site' -File -Recurse | ForEach-Object -Parall
         $blobParams['Properties'] = @{ ContentType = "text/html; charset=utf-8"; }
     }
 
-    Set-AzStorageBlobContent @blobParams
+    $_ | Set-AzStorageBlobContent @blobParams
 } 
