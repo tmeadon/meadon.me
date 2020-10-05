@@ -41,10 +41,6 @@ jobs:
         name: published-blog
         path: deploy/blog/site
 
-    - shell: bash
-      run: |
-        ls
-
     - name: Azure PowerShell login
       uses: azure/login@v1.1
       with:
@@ -58,9 +54,3 @@ jobs:
           & ./deploy/blog/deploy.ps1
         azPSVersion: '3.1.0'
 
-    # - name: Azure ARM deployment
-    #   uses: azure/arm-deploy@v1
-    #   with:
-    #     subscriptionId: ${{secrets.AZURE_SUB_ID}}
-    #     resourceGroupName: blog
-    #     template: ./deploy/blog/blog.deploy.json
