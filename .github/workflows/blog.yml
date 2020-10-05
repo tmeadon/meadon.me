@@ -35,13 +35,22 @@ jobs:
         submodules: true
         fetch-depth: 0
 
+    - name: Download published blog
+      uses: actions/download-artifact@v2
+      with:
+        name: published-blog
+
+    - shell: bash
+      run: |
+        ls
+
     - name: Azure PowerShell login
       uses: azure/login@v1.1
       with:
         creds: ${{secrets.AZURE_CREDS}}
         enable-AzPSSession: true 
 
-    - name: Azure create resource group
+    - name: Run Azure deployment script
       uses: azure/powershell@v1
       with:
         inlineScript: |
