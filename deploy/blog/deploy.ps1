@@ -19,18 +19,4 @@ $storageAccount = Get-AzStorageAccount -ResourceGroupName $rgName -AccountName $
 Enable-AzStorageStaticWebsite -Context $storageAccount.Context -IndexDocument 'index.html' -ErrorDocument404Path '404.html' -Verbose
 
 # deploy the files
-Get-ChildItem -Path '.\deploy\blog\site' -File -Recurse | ForEach-Object -Parallel {
-    
-    $blobParams = @{
-        Container = '$web'
-        Context   = $using:storageAccount.Context
-        Force     = $true
-    }
-
-    if ($_.Name -eq 'index.html')
-    {
-        $blobParams['Properties'] = @{ ContentType = "text/html; charset=utf-8"; }
-    }
-
-    $_ | Set-AzStorageBlobContent @blobParams
-} 
+Get-ChildItem -Path '.\deploy\blog\site' -File -Recurse | Set-AzStorageBlobContent -Container '$web' -Context $storageAccount.Context -Force # -Properties @{ ContentType = "text/html; charset=utf-8"; }
