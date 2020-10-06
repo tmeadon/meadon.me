@@ -55,7 +55,7 @@ url = "https://twitter.com/tommagumma"
 [[params.socialIcons]]
 icon = "fa-envelope"
 title = "e-mail"
-url = "blog@meadon.me"
+url = "mailto:blog@meadon.me"
 
 ## Menu items
 
