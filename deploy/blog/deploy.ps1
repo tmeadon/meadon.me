@@ -11,8 +11,11 @@ if (-not (Get-AzResourceGroup -ResourceGroupName $rgName -ErrorAction SilentlyCo
     New-AzResourceGroup -ResourceGroupName $rgName -Location $rgLocation
 }
 
-# deploy the arm template
-New-AzResourceGroupDeployment -ResourceGroupName $rgName -TemplateFile $PSScriptRoot\blog.deploy.json -StorageAccountName $storageAccountName -Verbose
+# deploy the arm template only if the storage account doesn't exist
+if (-not (Get-AzStorageAccount -StorageAccountName $storageAccountName -ResourceGroupName $rgName))
+{
+    New-AzResourceGroupDeployment -ResourceGroupName $rgName -TemplateFile $PSScriptRoot\blog.deploy.json -StorageAccountName $storageAccountName -Verbose
+}
 
 # enable static website
 $storageAccount = Get-AzStorageAccount -ResourceGroupName $rgName -AccountName $storageAccountName
