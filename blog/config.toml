@@ -13,7 +13,7 @@ pygmentsUseClasses = true
 #disqusShortname = ""
 
 # Google Analytics
-#googleAnalytics = "UA-123-45"
+googleAnalytics = "UA-179786144-1"
 
 [params]
 title = "Tom Meadon"
