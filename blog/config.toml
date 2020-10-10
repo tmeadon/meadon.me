@@ -1,7 +1,6 @@
 baseURL = "https://blog.meadon.me/"
 languageCode = "en"
 DefaultContentLanguage = "en"
-title = "Tom Meadon"
 theme = "anatole"
 summarylength = 10
 enableEmoji = true
@@ -16,7 +15,7 @@ pygmentsUseClasses = true
 googleAnalytics = "UA-179786144-1"
 
 [params]
-title = "Tom Meadon"
+title = "TOM MEADON"
 author = "Tom Meadon"
 description = "Technical Architect"
 profilePicture = "images/profile.jpg"
