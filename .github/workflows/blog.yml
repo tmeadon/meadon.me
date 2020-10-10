@@ -25,4 +25,4 @@ jobs:
         AZURE_STORAGE_URI: https://blogmeadonme.blob.core.windows.net/$web/
         AZURE_STORAGE_SAS: ${{ secrets.BLOG_SAS_TOKEN }}
       run: |
-        azcopy sync ./blog/public/ "${AZURE_STORAGE_URI}${AZURE_STORAGE_SAS}" --delete-destination=true
+        azcopy10 sync ./blog/public/ "${AZURE_STORAGE_URI}${AZURE_STORAGE_SAS}" --delete-destination=true
