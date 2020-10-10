@@ -19,38 +19,10 @@ jobs:
 
     - name: Hugo build
       run: hugo -s ./blog
-      
-    - name: Upload artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: published-blog
-        path: ./blog/public
 
-  deploy:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: true
-        fetch-depth: 0
-
-    - name: Download published blog
-      uses: actions/download-artifact@v2
-      with:
-        name: published-blog
-        path: deploy/blog/site
-
-    - name: Azure PowerShell login
-      uses: azure/login@v1.1
-      with:
-        creds: ${{secrets.AZURE_CREDS}}
-        enable-AzPSSession: true 
-
-    - name: Run Azure deployment script
-      uses: azure/powershell@v1
-      with:
-        inlineScript: |
-          & ./deploy/blog/deploy.ps1
-        azPSVersion: '3.1.0'
-
+    - name: Copy to storage
+      env:
+        AZURE_STORAGE_URI: https://blogmeadonme.blob.core.windows.net/$web/
+        AZURE_STORAGE_SAS: ${{ secrets.BLOG_SAS_TOKEN }}
+      run: |
+        azcopy sync ./blog/public/ "${AZURE_STORAGE_URI}${AZURE_STORAGE_SAS}" --delete-destination=true
