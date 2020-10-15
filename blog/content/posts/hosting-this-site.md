@@ -36,7 +36,7 @@ Once VS Code fired up I used the Command Palette (`F1`), selected `Remote-Contai
 
 ![Hugo container](/images/hugo-dev-container_0.gif)
 
-After the container image downloaded and spun up, VS Code presented me with my new project directory, a `zsh` shell to play with and a couple of files in a new directory called `.devcontainer`.  As a quick test to see that what I was presented with is what I was expecting I ran `hugo version` which returned `Hugo Static Site Generator v0.75.1...`.  Great, time to get cracking.
+After the container image downloaded and span up VS Code presented me with my new project directory, a `zsh` shell to play with and a couple of files in a new directory called `.devcontainer`.  As a quick test to see that what I was presented with is what I was expecting I ran `hugo version` which returned `Hugo Static Site Generator v0.75.1...`.  Great, time to get cracking.
 
 First, I created a new Hugo 'site':
 
@@ -57,9 +57,32 @@ cd ./blog
 hugo server -s blog
 ```
 
+To add some content (or in other words a blog post), I ran `hugo new posts/hosting-this-site.md` which created a new markdown file under `content/posts` and began writing.  I also decided that I wanted to make some tweaks to the theme's styling which Hugo allowed me to do by chucking some CSS files (lifted from the theme's example site and fiddled around with) in `assets/css` and enabling the files by setting the `customCss` property in the config file.
+
 #### Initial deployment and setup
 
-...
+After tinkering with the sites config and styling and adding some content, images and favicons, it was time to make the site available on the world wide web. The first job was to create the Azure storage account and enable it for static web sites - for this I turned to trusty Azure PowerShell:
+
+```PowerShell
+# create a resource group
+$rg = New-AzResourceGroup -ResourceGroupName <ResourceGroupName> -Location 'uksouth'
+
+# create a storage account
+$sa = New-AzStorageAccount -ResourceGroupName $rg.ResourceGroupName -Name <StorageAccountName> -SkuName 'Standard_LRS' -Location $rg.Location -Kind 'StorageV2'
+
+# enable static sites
+Enable-AzStorageStaticWebsite -Context $sa.Context -IndexDocument 'index.html' -ErrorDocument404Path '404.html'
+```
+
+The next task was to build the site (by simply running `hugo`) and push the build's output (which is created by default under `public`) into the storage account's new `$web` container.  Since PowerShell is always my go to, I attempted to use the `Set-AzStorageBlobContent` to upload the site's root files and directories, however it didn't set the blobs' `ContentType` property correctly, resulting in my browser not rendering any of the CSS - it was a right mess as you can imagine.  Rather than spending time trying to figure out how to work around this problem, I gave `azcopy` a go by running (I was lazy and got a SAS URI from the Azure Portal):
+
+```PowerShell
+azcopy sync ./blog/public/ "<sas_uri>" --delete-destination=true
+```
+
+This did the trick and now my site was accessible at the storage account's static website URL (which is readily available in the Azure Portal).
+
+
 
 #### CI/CD
 
