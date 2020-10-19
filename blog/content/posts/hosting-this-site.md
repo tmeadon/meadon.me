@@ -9,7 +9,7 @@ tags:
 - hugo
 - containers
 - azure
-- ci/cd
+- ci-cd
 - github-actions
 - web
 ---
