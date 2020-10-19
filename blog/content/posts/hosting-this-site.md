@@ -2,7 +2,7 @@
 author:
 title: "Hosting this static site: Hugo, Azure Storage, CloudFlare & GitHub Actions"
 date: 2020-09-24T08:12:17Z
-draft: true
+draft: false
 categories:
 - How To
 tags:
