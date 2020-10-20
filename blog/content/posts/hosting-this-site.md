@@ -1,6 +1,6 @@
 ---
 author:
-title: "Hosting this static site: Hugo, Azure Storage, CloudFlare & GitHub Actions"
+title: "Hosting this static site: Hugo, Azure Storage, Cloudflare & GitHub Actions"
 date: 2020-09-24T08:12:17Z
 draft: false
 categories:
@@ -84,11 +84,11 @@ The next task was to build the site (by simply running `hugo`) and push the buil
 azcopy sync ./blog/public/ "<container_sas_uri>"
 ```
 
-This did the trick and now my site was accessible at the storage account's static website URL (which is readily available in the Azure Portal).  As I mentioned in the introduction, one of the downsides of using Azure Storage for hosting the site is that it doesn't support HTTPS for custom domains so at this stage I needed to hop over to CloudFlare to set up the custom domain for my site.
+This did the trick and now my site was accessible at the storage account's static website URL (which is readily available in the Azure Portal).  As I mentioned in the introduction, one of the downsides of using Azure Storage for hosting the site is that it doesn't support HTTPS for custom domains so at this stage I needed to hop over to Cloudflare to set up the custom domain for my site.
 
-CloudFlare offer a free SSL/TLS offload service (including custom certificate) for any domain, all you have to do is switch the nameservers for your DNS zone over to their nameservers.  Once that's done they can route your traffic via their datacentres by changing your public DNS records to point to their ingress services.  In order to register a custom domain with Azure Storage all I needed to do was create a new CNAME record for my domain pointing to the static website endpoint for my storage account.
+Cloudflare offer a free SSL/TLS offload service (including custom certificate) for any domain, all you have to do is switch the nameservers for your DNS zone over to their resolvers.  Once that's done they can route your traffic via their datacentres by changing your public DNS records to point to their ingress services.  In order to register a custom domain with Azure Storage all I needed to do was create a new CNAME record for my domain pointing to the static website endpoint for my storage account.
 
-Unfortunately the method by which CloudFlare proxy the domain presented a trip hazard here - Azure was refusing to verify my domain because, despite the record showing as a CNAME in the CloudFlare portal, the service was actually advertising an A record pointing to a CloudFlare IP in public DNS.  To get round this I had to temporarily disable proxying for the `blog.meadon.me` domain, which caused CloudFlare to replace their A record with my 'real' CNAME record which Azure could then verify.  After the verification was successful I was able to re-enable proxying (thankfully, otherwise my plan would have been foiled!) and my site was available for HTTPS connections using my custom domain.  I have to admit this problem took me a lot longer to work out than it should have done - you know what they say, it's always DNS!
+Unfortunately the method by which Cloudflare proxy the domain presented a trip hazard here - Azure was refusing to verify my domain because, despite the record showing as a CNAME in the Cloudflare portal, the service was actually advertising an A record pointing to a Cloudflare IP in public DNS.  To get round this I had to temporarily disable proxying for the `blog.meadon.me` domain, which caused Cloudflare to replace their A record with my 'real' CNAME record which Azure could then verify.  After the verification was successful I was able to re-enable proxying (thankfully, otherwise my plan would have been foiled!) and my site was available for HTTPS connections using my custom domain.  I have to admit this problem took me a lot longer to work out than it should have done - you know what they say, it's always DNS!
 
 ## CI/CD with GitHub Actions
 
