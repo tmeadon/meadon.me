@@ -134,4 +134,4 @@ jobs:
 
 With that in place, all that I need to do to release a change to the site is push a commit to my GitHub repository and the rest will be taken care of.  Hugo allows its users to place pages in a 'draft' state (see [here](https://gohugo.io/getting-started/usage/#draft-future-and-expired-content) for details) which by default won't be included in the output of the `hugo` command in the workflow above - using this I can commit in-progress posts to GitHub (in case my laptop explodes) knowing that they'll only be published when I move them out of drafts.
 
-Let's see where this takes me!
+Feel free to go and take a look at the source code for this site - it's over on GitHub [here](https://github.com/tommagumma/meadon.me).  Let's see where this takes me!
