@@ -87,16 +87,17 @@ Now we understand the basics of interacting with the Azure REST API, let's see h
 $fa = Get-AzFunctionApp -Name <NameOfFunctionApp> -ResourceGroupName <NameOfResourceGroup>
 ```
 
-According to the [docs](https://docs.microsoft.com/en-us/rest/api/appservice/webapps/listfunctions) we can list the functions by appending `/functions` to the resource ID in the request URI as well as the API version (I'll be using the latest: `2020-06-01`).  Running that against my example Function App gives me the following:
+According to the [docs](https://docs.microsoft.com/en-us/rest/api/appservice/webapps/listfunctions) we can list the functions by appending `/functions` to the resource ID in the request URI as well as the API version (I'll be using the latest at time of: `2020-06-01`).  Running that against my example Function App gives me the following:
 
 ```PowerShell
 # make the http request and convert the Content to a PSCustomObject
-PS> $response = (Invoke-AzRestMethod -Path ($fa.Id + "\functions?api-version=2020-06-01") -Method GET).content | ConvertFrom-Json
+$response = (Invoke-AzRestMethod -Path ($fa.Id + "\functions?api-version=2020-06-01") -Method GET).content | ConvertFrom-Json
+```
 
-# the response contains an array property called 'value' which contains our functions
-PS> $response.value
+The `$response` variable now has an array property called `value` which contains objects for each of the Function App's Functions:
 
-id         : /subscriptions/84ead6cc-4344-4a52-891c-c5523c6c0129/resourceGroups/fa-example/providers/Microsoft.Web/sites/tomsfunctionapp/functions/HttpTrigger1
+```text
+id         : /subscriptions/abc123/resourceGroups/fa-example/providers/Microsoft.Web/sites/tomsfunctionapp/functions/HttpTrigger1
 name       : tomsfunctionapp/HttpTrigger1
 type       : Microsoft.Web/sites/functions
 location   : UK South
@@ -105,7 +106,7 @@ properties : @{name=HttpTrigger1; function_app_id=; script_root_path_href=https:
              test_data_href=https://tomsfunctionapp.azurewebsites.net/admin/vfs/data/Functions/sampledata/HttpTrigger1.dat; secrets_file_href=; href=https://tomsfunctionapp.azurewebsites.net/admin/functions/HttpTrigger1; config=;
              files=; test_data=; invoke_url_template=https://tomsfunctionapp.azurewebsites.net/api/httptrigger1; language=powershell; isDisabled=False}
 
-id         : /subscriptions/84ead6cc-4344-4a52-891c-c5523c6c0129/resourceGroups/fa-example/providers/Microsoft.Web/sites/tomsfunctionapp/functions/HttpTrigger2
+id         : /subscriptions/abc123/resourceGroups/fa-example/providers/Microsoft.Web/sites/tomsfunctionapp/functions/HttpTrigger2
 name       : tomsfunctionapp/HttpTrigger2
 type       : Microsoft.Web/sites/functions
 location   : UK South
@@ -115,6 +116,18 @@ properties : @{name=HttpTrigger2; function_app_id=; script_root_path_href=https:
              files=; test_data=; invoke_url_template=https://tomsfunctionapp.azurewebsites.net/api/httptrigger2; language=powershell; isDisabled=False}
 ```
 
+Expanding out the `properties` property for the first item in the shows the existence of a property called `invoke_url_template` whose value is the URL for the Function - exactly what I was looking for!  So, to list the URLs we can run:
+
+```PowerShell
+$response.value.properties.invoke_url_template
+```
+
+Which - for my example Function App - returns:
+
+```text
+https://tomsfunctionapp.azurewebsites.net/api/httptrigger1
+https://tomsfunctionapp.azurewebsites.net/api/httptrigger2
+```
 
 ## Retrieving the Function keys for a Function
 
