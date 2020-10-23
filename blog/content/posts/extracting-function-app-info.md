@@ -91,10 +91,10 @@ According to the [docs](https://docs.microsoft.com/en-us/rest/api/appservice/web
 
 ```PowerShell
 # make the http request and convert the Content to a PSCustomObject
-$response = (Invoke-AzRestMethod -Path ($fa.Id + "\functions?api-version=2020-06-01") -Method GET).content | ConvertFrom-Json
+$functions = (Invoke-AzRestMethod -Path ($fa.Id + "\functions?api-version=2020-06-01") -Method GET).content | ConvertFrom-Json
 ```
 
-The `$response` variable now has an array property called `value` which contains objects for each of the Function App's Functions:
+The `$functions` variable now has an array property called `value` which contains objects for each of the Function App's Functions:
 
 ```text
 id         : /subscriptions/abc123/resourceGroups/fa-example/providers/Microsoft.Web/sites/tomsfunctionapp/functions/HttpTrigger1
@@ -119,7 +119,7 @@ properties : @{name=HttpTrigger2; function_app_id=; script_root_path_href=https:
 Expanding out the `properties` property for the first item in the shows the existence of a property called `invoke_url_template` whose value is the URL for the Function - exactly what I was looking for!  So, to list the URLs we can run:
 
 ```PowerShell
-$response.value.properties.invoke_url_template
+$functions.value.properties.invoke_url_template
 ```
 
 Which - for my example Function App - returns:
@@ -130,6 +130,24 @@ https://tomsfunctionapp.azurewebsites.net/api/httptrigger2
 ```
 
 ## Retrieving the Function keys for a Function
+
+To get the keys for the individual Functions, we can use the ['List Functions Keys'](https://docs.microsoft.com/en-us/rest/api/appservice/webapps/listfunctionkeys) operation for each Function by running something like:
+
+```PowerShell
+# make the rest request
+$keys = (Invoke-AzRestMethod -Path ($fa.Id + "\functions\<FunctionName>\listkeys?api-version=2020-06-01") -Method POST).Content | ConvertFrom-Json
+
+# if you've not added any additional keys, $keys will have a single property called default containing the function's key
+$keys.default
+```
+
+So, in order to get the keys for all of the Functions in a Function App, we can iterate through the `$functions` variable we created in the previous section and output a PSCustomObject for each Function:
+
+```PowerShell
+foreach ($functionName in $functions.value.properties.name) {
+    $keys = (Invoke-AzRestMethod -Path ($fa.Id + "\functions\$functionName\listkeys?api-version=2020-06-01") -Method POST).content | ConvertFrom-Json
+    [PSCustomObject]@{FunctionName = $functionName; DefaultKey = $keys.default}
+}
 
 ## Stitching it together
 
@@ -153,3 +171,5 @@ $repsonse.value
 ```PowerShell
 $response = (Invoke-AzRestMethod -Path ($fa.id + "/functions/$($functionName)/listkeys?api-version=2019-08-01") -Method POST).Content | ConvertFrom-Json
 ```
+
+abcedsasd
