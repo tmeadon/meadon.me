@@ -148,7 +148,7 @@ foreach ($functionName in $functions.value.properties.name) {
     $keys = (Invoke-AzRestMethod -Path ($fa.Id + "\functions\$functionName\listkeys?api-version=2020-06-01") -Method POST).content | ConvertFrom-Json
     [PSCustomObject]@{FunctionName = $functionName; DefaultKey = $keys.default}
 }
-
+```
 ## Stitching it together
 
 ## What else is available?
