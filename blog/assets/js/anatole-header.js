@@ -5,7 +5,7 @@ function getTheme() {
 
 // add chroma css
 function setChromaTheme(theme) {
-    var lightCssRegex = /^.*syntax\-github\..*css$/;
+    var lightCssRegex = /^.*syntax\-vs\..*css$/;
     var darkCssRegex = /^.*syntax\-native\..*css$/;
     var links = document.getElementsByTagName('link');
 
@@ -51,8 +51,10 @@ function init() {
         // load a stored theme
         if (theme == 'light') {
             document.documentElement.setAttribute('data-theme', 'light');
+            setTheme('light')
         } else {
             document.documentElement.setAttribute('data-theme', 'dark');
+            setTheme('dark')
         }
     }
 }
