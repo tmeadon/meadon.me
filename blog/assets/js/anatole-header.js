@@ -5,7 +5,7 @@ function getTheme() {
 
 // add chroma css
 function setChromaTheme(theme) {
-    var lightCssRegex = /^.*syntax\-vs\..*css$/;
+    var lightCssRegex = /^.*syntax\-manni\..*css$/;
     var darkCssRegex = /^.*syntax\-native\..*css$/;
     var links = document.getElementsByTagName('link');
 
