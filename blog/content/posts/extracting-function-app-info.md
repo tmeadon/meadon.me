@@ -16,7 +16,7 @@ Recently I needed to pull some information out of several Azure Function Apps as
 
 ## Background
 
-First - a brief explanation of what I was trying to do: my team and I were figuring out how we should distribute our PowerShell Azure Functions between different App Service Plans in order to optimise performance.  The Functions were being deployed to various Function Apps using an Azure DevOps Release pipeline and since we were intending on moving the individual Functions between Function Apps, we decided to add a task in the pipeline to pull out the Function keys and URL's for each Function to save us from having to visit the Portal everytime we jigged the distribution around.  The intention was to then push the keys into an Azure Key Vault instance and store the URLs in some JSON in Azure Blob Storage.
+First - a brief explanation of what I was trying to do: my team and I were figuring out how we should distribute our PowerShell Azure Functions between different App Service Plans in order to optimise performance.  The Functions were being deployed to various Function Apps using an Azure DevOps Release pipeline and since we were intending on moving the individual Functions between Function Apps, we decided to add a task in the pipeline to pull out the Function keys and URL's for each Function to save us from having to visit the Portal everytime we jigged the distribution around.  The intention was to then push the complete URL (i.e. URL + the `code` query string parameter) for each Function into an Azure Key Vault account.
 
 To tackle this my first port of call was the new(ish) `Get-AzFunctionApp` cmdlet, however I found that it only returns host level information such as the runtime, identity, application settings etc. - nothing about the individual Functions.  It was a similar story for the `Get-AzWebApp` cmdlet.  I found a few resources online that described how to use the REST API to retrieve Function keys so I decided to take a look at the [Azure Web Apps REST API documentation](https://docs.microsoft.com/en-us/rest/api/appservice/webapps) and it didn't take long to find the ['List Functions'](https://docs.microsoft.com/en-us/rest/api/appservice/webapps/listfunctions) and ['List Functions Keys'](https://docs.microsoft.com/en-us/rest/api/appservice/webapps/listfunctionkeys) operations.
 
@@ -116,7 +116,9 @@ properties : @{name=HttpTrigger2; function_app_id=; script_root_path_href=https:
              files=; test_data=; invoke_url_template=https://tomsfunctionapp.azurewebsites.net/api/httptrigger2; language=powershell; isDisabled=False}
 ```
 
-Expanding out the `properties` property for the first item in the shows the existence of a property called `invoke_url_template` whose value is the URL for the Function - exactly what I was looking for!  So, to list the URLs we can run:
+## Retrieving the URL for a Function
+
+Expanding out the `properties` property for the first item in the array shows the existence of a property called `invoke_url_template` whose value is the URL for the Function - exactly what I was looking for!  So, to list the URLs for all of the Functions we can run:
 
 ```PowerShell
 $functions.value.properties.invoke_url_template
@@ -149,27 +151,70 @@ foreach ($functionName in $functions.value.properties.name) {
     [PSCustomObject]@{FunctionName = $functionName; DefaultKey = $keys.default}
 }
 ```
+
 ## Stitching it together
 
-## What else is available?
+Using what we discovered in the previous two sections we can put together a PowerShell function that could be called from a task in the deployment pipeline.  The example function below will pull out the complete URLs for all of the Functions in a given Function App and will create (or update) a secret in a given Key Vault account for each Function containing its URL.  The name of the secrets will match the Functions' names, so make sure there aren't any existing secrets in your Key Vault account with the same names before running this!  
 
+```PowerShell {linenos=table}
+function Save-FunctionAppDetails
+{
+    [CmdletBinding()]
+    param
+    (
+        # Function app name
+        [Parameter(Mandatory)]
+        [string]
+        $FunctionAppName,
 
+        # Name of the function app's resource group
+        [Parameter(Mandatory)]
+        [string]
+        $FunctionAppResourceGroup,
 
-```PowerShell
-# first get the function app
-$fa = Get-AzResource -Name $faName -ResourceGroupName $rgName
+        # Key vault name
+        [Parameter(Mandatory)]
+        [string]
+        $KeyVaultName
+    )
 
-# invoke rest api method and convert the response from json
-$response = (Invoke-AzRestMethod -Path ($fa.id + "/functions?api-version=2019-08-01") -Method GET).Content | ConvertFrom-Json -Depth 100
+    begin {}
 
-# output a list of functions
-$repsonse.value
+    process
+    {
+        # check the function app and the key vault exist
+        $functionApp = Get-AzFunctionApp -Name $FunctionAppName -ResourceGroupName $FunctionAppResourceGroup -ErrorAction SilentlyContinue
+        $keyVault = Get-AzKeyVault -VaultName $KeyVaultName -ErrorAction SilentlyContinue
+
+        if (-not $functionApp) { throw ('Unable to find a function app called {0} in resource group {1}' -f $FunctionAppName, $FunctionAppResourceGroup) }
+        if (-not $keyVault) { throw ('Unable to find a key vault account called {0}' -f $KeyVaultName) }
+
+        # invoke the rest api methods and store the complete url for each function in a hashtable
+        $functionUrls = @{}
+        $functions = (Invoke-AzRestMethod -Path ($functionApp.Id + "\functions?api-version=2020-06-01") -Method GET).content | ConvertFrom-Json
+
+        foreach ($func in $functions.value)
+        {
+            if ($func.properties.invoke_url_template)
+            {
+                $keys = (Invoke-AzRestMethod -Path ($functionApp.Id + "\functions\$($func.properties.name)\listkeys?api-version=2020-06-01") -Method POST).Content | ConvertFrom-Json
+                $functionUrls.Add($func.properties.name, ('{0}?code={1}' -f $func.properties.invoke_url_template, $keys.default))
+            }
+        }
+
+        # iterate through the hashtable's keys and create a key vault secret for each one
+        foreach ($key in $functionUrls.Keys)
+        {
+            $kvSecretParams = @{
+                VaultName = $keyVault.VaultName
+                Name = $key
+                SecretValue = (ConvertTo-SecureString -String $functionUrls[$key] -AsPlainText -Force)
+            }
+
+            Set-AzKeyVaultSecret @kvSecretParams | Select-Object -ExpandProperty Id
+        }
+    }
+
+    end {}
+}
 ```
-
- Get the function keys for a given function
-
-```PowerShell
-$response = (Invoke-AzRestMethod -Path ($fa.id + "/functions/$($functionName)/listkeys?api-version=2019-08-01") -Method POST).Content | ConvertFrom-Json
-```
-
-abcedsasd
