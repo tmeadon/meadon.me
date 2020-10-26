@@ -1,6 +1,6 @@
 ---
 title: "Extracting information from Azure Functions using the REST API"
-date: 2020-10-26T10:00:00Z
+date: 2020-10-26T08:00:00Z
 draft: false
 categories:
 - How To
