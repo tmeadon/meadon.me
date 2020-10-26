@@ -1,6 +1,6 @@
 ---
 title: "Extracting information from Azure Functions using the REST API"
-date: 2020-10-16T12:49:29Z
+date: 2020-10-26T12:49:29Z
 draft: true
 categories:
 - How To
@@ -9,6 +9,7 @@ tags:
 - powershell
 - azure-functions
 - automation
+- api
 ---
 Recently I needed to pull some information out of several Azure Function Apps as a final task in their deployment pipeline and I found that my go-to Azure PowerShell commands did not give me what I needed.  This post describes how you can use the Azure REST API when your favourite tools don't quite cut the mustard.
 
@@ -24,7 +25,7 @@ To tackle this my first port of call was the new(ish) `Get-AzFunctionApp` cmdlet
 
 Before we can do anything else we need to figure out how we're going to make the calls to the REST API and I should start by saying that there a million and one ways to do it - every programming language has a plethora of methods to invoke HTTP requests.  I'll be focusing on some of the options available in PowerShell however you should be able to apply the information to your language of choice.
 
-The hardest part of making REST API requests to Azure Resource Manager is authentication; we're used to authenticating once when working with Azure's various command line tools and having the tools handle the authenication requirements for each request under the bonnet.  Since we'll be dealing with the raw HTTP requests (that the command line tools ultimately make for us), we'll need to supply the required [HTTP headers](https://docs.microsoft.com/en-us/rest/api/azure/) with each request.
+The hardest part of making REST API requests to Azure Resource Manager is authentication; we're used to authenticating once when working with Azure's various command line tools and having the tools handle the authenication requirements for each request under the bonnet.  Since we'll be dealing with the raw HTTP requests (that the command line tools ultimately make for us), we'll need to supply the required [HTTP authentication headers](https://docs.microsoft.com/en-us/rest/api/azure/) with each request.
 
 Or will we?  Version `4.7.0` of the Azure PowerShell module introduced a shiny new cmdlet called `Invoke-AzRestMethod` which allows users to make arbitrary REST API requests to any Azure management endpoint without having to worry about authentication - result!  Before this cmdlet existed we would have had to jump through a few hoops before being able to make REST API requests:
 
@@ -59,7 +60,7 @@ Or will we?  Version `4.7.0` of the Azure PowerShell module introduced a shiny n
     Invoke-RestMethod -Uri $uri -Headers $headers -Method <SomeMethod>
     ```
 
-Using `Invoke-AzRestMethod` we don't have to worry about any of that - as long as we've logged in to Azure PowerShell (using `Connect-AzAccount`) we can simply run something like:
+Using `Invoke-AzRestMethod` we don't have to worry about any of that - as long as we've logged in to Azure PowerShell (using `Connect-AzAccount`) we can simply run:
 
 ```PowerShell
 Invoke-AzRestMethod -Path ('{0}?api-version={1}' -f $resourceId, $apiVersion) -Method <SomeMethod>
@@ -87,7 +88,7 @@ Now we understand the basics of interacting with the Azure REST API, let's see h
 $fa = Get-AzFunctionApp -Name <NameOfFunctionApp> -ResourceGroupName <NameOfResourceGroup>
 ```
 
-According to the [docs](https://docs.microsoft.com/en-us/rest/api/appservice/webapps/listfunctions) we can list the functions by appending `/functions` to the resource ID in the request URI as well as the API version (I'll be using the latest at time of: `2020-06-01`).  Running that against my example Function App gives me the following:
+According to the [docs](https://docs.microsoft.com/en-us/rest/api/appservice/webapps/listfunctions) we can list the functions by appending `/functions` to the resource ID in the request URI as well as the API version (I'll be using the latest version at the time of writing: `2020-06-01`).  Running that against my example Function App gives me the following:
 
 ```PowerShell
 # make the http request and convert the Content to a PSCustomObject
@@ -133,7 +134,7 @@ https://tomsfunctionapp.azurewebsites.net/api/httptrigger2
 
 ## Retrieving the Function keys for a Function
 
-To get the keys for the individual Functions, we can use the ['List Functions Keys'](https://docs.microsoft.com/en-us/rest/api/appservice/webapps/listfunctionkeys) operation for each Function by running something like:
+To get the keys for the individual Functions, we can use the ['List Functions Keys'](https://docs.microsoft.com/en-us/rest/api/appservice/webapps/listfunctionkeys) operation for each Function by running:
 
 ```PowerShell
 # make the rest request
@@ -146,7 +147,8 @@ $keys.default
 So, in order to get the keys for all of the Functions in a Function App, we can iterate through the `$functions` variable we created in the previous section and output a PSCustomObject for each Function:
 
 ```PowerShell
-foreach ($functionName in $functions.value.properties.name) {
+foreach ($functionName in $functions.value.properties.name)
+{
     $keys = (Invoke-AzRestMethod -Path ($fa.Id + "\functions\$functionName\listkeys?api-version=2020-06-01") -Method POST).content | ConvertFrom-Json
     [PSCustomObject]@{FunctionName = $functionName; DefaultKey = $keys.default}
 }
@@ -195,6 +197,7 @@ function Save-FunctionAppDetails
 
         foreach ($func in $functions.value)
         {
+            # only get the keys for functions with URLs (i.e. ignore non-http triggered functions)
             if ($func.properties.invoke_url_template)
             {
                 $keys = (Invoke-AzRestMethod -Path ($functionApp.Id + "\functions\$($func.properties.name)\listkeys?api-version=2020-06-01") -Method POST).Content | ConvertFrom-Json
@@ -210,7 +213,6 @@ function Save-FunctionAppDetails
                 Name = $key
                 SecretValue = (ConvertTo-SecureString -String $functionUrls[$key] -AsPlainText -Force)
             }
-
             Set-AzKeyVaultSecret @kvSecretParams | Select-Object -ExpandProperty Id
         }
     }
@@ -218,3 +220,5 @@ function Save-FunctionAppDetails
     end {}
 }
 ```
+
+Harnessing the power of Azure's REST API enables you to take complete control over how you interact with Azure Resource Manager and removes your dependency on the other Azure management tools.  The `Invoke-AzRestMethod` cmdlet is an excellent trick to have up your sleeve for when your needs are too great for the regular toolsets - happy RESTing!
