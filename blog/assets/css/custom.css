@@ -354,7 +354,7 @@ a:active {
     line-height: 1;
     font-weight: 600;
     /* color: #464646; */
-    color: var(--heading-color);
+    color: var(--body-color);
     font-size: 22px;
     margin: 0;
 }
@@ -385,7 +385,7 @@ a:active {
     line-height: 1;
     font-weight: 600;
     /* color: #464646; */
-    color: var(--heading-color);
+    color: var(--body-color);
     font-size: 22px;
     margin: 0;
 }
