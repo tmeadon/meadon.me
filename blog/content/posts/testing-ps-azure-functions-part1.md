@@ -16,7 +16,7 @@ That covers the 'what' and the 'why' but what about the 'how'?  Well if you're n
 
 ## Writing testable code
 
-As I mentioned in the last section, in order to write good unit tests, we need to write out code in a way that allows us to do so.  To effectively test each unit of logic in isolation, our code needs to be broken up into the units that we want to test.  What that means for us in the PowerShell world is that where we might have ordinarily stitched various bits of logic together into a single script (or large function), we should instead wrap each piece in its own smaller function (which become our testable units) and call it from our main script/function.
+As I mentioned in the last section, in order to write good unit tests we need to write out code in a way that allows us to do so.  To effectively test each unit of logic in isolation our code needs to be broken up into the units that we want to test.  What that means for us in the PowerShell world is that where we might have ordinarily stitched various bits of logic together into a single script (or large function), we should instead wrap each piece in their own smaller functions (which become our testable units) and in turn call them from our main script/function.
 
 In order to apply this to a PowerShell Azure Functions project we'll need to overcome a challenge almost immediately.  When we create a new Functions project (in the Azure Portal or locally), we'll be presented with a boilerplate project template that looks something like this (also available [here](https://github.com/tommagumma/ps-func-testing/tree/ec9a02a4625af4dbeefd831a6fcb8cba8ae44ced/FunctionApp)):
 
@@ -55,6 +55,4 @@ Here's what the directory structure will become:
             CustomModule.psm1
 ```
 
-
 ## Testing a basic HTTP Function
-
