@@ -1,5 +1,5 @@
 ---
-title: "Trusting Private HTTPS Certificates in Azure Functions With PowerShell"
+title: "Automating Azure Functions Private HTTPS Client Certificates"
 date: 2021-03-28T18:59:19Z
 draft: true
 ---
@@ -8,18 +8,18 @@ One of the most powerful features of Azure Functions are their input and output 
 
 Simple - since the Functions runtime doesn't implicitly know to trust the service's private certificate it won't be able to authenticate the server and your requests will fail.  Fortunately Azure Functions provide us with the ability to upload the public key of our service's HTTPS certificate which enables the trust and therefore fixes this problem.  This is dead easy to do via the Function App's 'TLS/SSL settings' section in the Azure Portal, but clicky clicky solutions like this firstly aren't much fun and secondly don't help when we want to automate this task in a pipeline or similar.
 
-The question I'll be answering in this post is how we can automate this process using PowerShell.
+The question I'll be answering in this post is: how we can automate this process using PowerShell?
 
 ### Getting hold of the public key certificates
 
 The first challenge is to get the public key certificates that we wish to upload into our Function App and to do this we have a couple of options:
 
 1. Download the certificates manually (using a web browser for instance), store them somewhere safe (e.g. Azure Key Vault) and then download them when we want to run this process
-2. Download the certificates from the service(s) dynamically at runtime
+2. Download the certificates from the service(s) directly at runtime by establishing an HTTPS connection to them
 
 Whilst option 2 is probably a bit trickier to achieve, it has the following benefits: we don't have to maintain our copy of the certificates (and keep an eye on whether their still relevant or not), and scaling to multiple services requires minimal effort.
 
-I couldn't find a PowerShell native way to connect to a given web server and read it's HTTPS certificate, so I turned to the `System.Net` .NET namespace (the ability to do this is one of the reasons why PowerShell is great :D):
+I couldn't find a PowerShell native way to connect to a given web server and read it's HTTPS certificate, so I turned to the `System.Net.Security` .NET namespace - specifically the `TcpClient` and `SslStream` classes.
 
 ```PowerShell
 $hostname = "enter_hostname"
@@ -35,7 +35,7 @@ $stream.AuthenticateAsClient($Hostname)
 $cert = $stream.RemoteCertificate
 ```
 
-This code gives us the certificate at the end of the chain which isn't quite enough for the Functions runtime to be able to trust our service, we'll also need to get the public key of every other certificate in the chain (e.g. intermediate and root CAs).  The `System.Security.Cryptography` .NET namespace can help here:
+This code gives us the certificate at the end of the chain which isn't quite enough for the Functions runtime to be able to trust our service, we'll also need to get the public key of every other certificate in the chain (i.e. any intermediate and root CAs).  The `System.Security.Cryptography` .NET namespace can help here:
 
 ```PowerShell
 $chain = [System.Security.Cryptography.X509Certificates.X509Chain]::new()
@@ -52,7 +52,7 @@ According to the documentation we'll need to call the API once for each certific
 
 - Walk the certificate chain
 - For each certificate:
-  - Convert the certificate to a byte array (hint, we'll need to use the `System.Security.Cryptography` .NET namespace again)
+  - Convert the certificate to a byte array (hint, we can use the `System.Security.Cryptography` .NET namespace again)
   - Invoke the REST API call to upload the certificate to the Function App
 
 We'll need to provide a name for each certificate we want to upload so we'll define a naming prefix and then we'll create each certificate's name by appending its position in the chain (in other words `$i` in the code below).
