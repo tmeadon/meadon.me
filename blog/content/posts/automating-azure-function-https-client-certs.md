@@ -14,7 +14,7 @@ images:
 - /images/pwsh_functions.png
 ---
 
-One of the most powerful features of Azure Functions are their input and output bindings which enable simple integration with other services.  Whilst the [collection of bindings](https://docs.microsoft.com/en-us/azure/azure-functions/functions-triggers-bindings?tabs=csharp#supported-bindings) currently on offer covers a good number of common integration points, it is likely that we will need to communicate with a service that doesn't have a binding at some point in the future.  When this happens we will need to implement this communication ourselves which, more often than not, will involve making HTTP calls to the service using whatever method is appropriate in our language of choice.  As it's 2021 it really ought to be fair to assume that we'll be communicating with the service using HTTPS, so what happens when that service is offering up a non-public (e.g. self signed or produced by your organisation's private certificate authority) certificate for HTTPS?
+One of the most powerful features of Azure Functions are their input and output bindings which enable simple integration with other services.  Whilst the [collection of bindings](https://docs.microsoft.com/en-us/azure/azure-functions/functions-triggers-bindings?tabs=csharp#supported-bindings) currently on offer covers a good number of common integration points, it is likely that we will need to communicate with a service that doesn't have a binding at some point in the future.  When this happens we will need to implement this communication ourselves which, more often than not, will involve making HTTP calls to the service using whatever method is appropriate in our language of choice.  As it's 2021 it really ought to be fair to assume that we'll be communicating with the service using HTTPS, so what happens when that service is offering up a non-public (e.g. self signed or produced by a private certificate authority) certificate for HTTPS?
 
 Simple - since the Functions runtime doesn't implicitly know to trust the service's private certificate it won't be able to authenticate the server and your requests will fail.  Fortunately Azure Functions provide us with the ability to upload the public key of our service's HTTPS certificate which enables the trust and therefore fixes this problem.  This is dead easy to do via the Function App's 'TLS/SSL settings' section in the Azure Portal, but clicky clicky solutions like this firstly aren't much fun and secondly don't help when we want to automate this task in a pipeline or similar.
 
@@ -24,12 +24,12 @@ The question I'll be answering in this post is: how we can automate this process
 
 The first challenge is to get the public key certificates that we wish to upload into our Function App and to do this we have a couple of options:
 
-1. Download the certificates manually (using a web browser for instance), store them somewhere safe (e.g. Azure Key Vault) and then download them when we want to run this process
-2. Download the certificates from the service(s) directly at runtime by establishing an HTTPS connection to them
+1. Download the certificates from the service(s) manually (using a web browser for instance), store them somewhere safe (e.g. Azure Key Vault) and then download them from there at runtime
+2. Download the certificates from the service(s) directly at runtime by establishing an HTTPS connection to them in code
 
 Whilst option 2 is probably a bit trickier to achieve, it has the following benefits: we don't have to maintain our copy of the certificates (and keep an eye on whether their still relevant or not), and scaling to multiple services requires minimal effort.
 
-I couldn't find a PowerShell native way to connect to a given web server and read it's HTTPS certificate, so I turned to the `System.Net.Security` .NET namespace - specifically the `TcpClient` and `SslStream` classes.
+I couldn't find a PowerShell native way to connect to a given web server and read it's HTTPS certificate, so I turned to the `System.Net.Security` .NET namespace - specifically the `TcpClient` and `SslStream` classes (the ability to do this is one of the many great things about PowerShell :smiley:):
 
 ```PowerShell
 $hostname = "enter_hostname"
