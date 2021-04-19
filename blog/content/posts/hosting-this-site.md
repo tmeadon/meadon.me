@@ -17,6 +17,8 @@ Welcome to my blog!
 
 For my first post I thought I would write about the end-to-end process I followed to get this site online.  I'll be covering local development, initial deployment and setup and finally how I set up a rudimentary CI/CD process using GitHub Actions.
 
+<!--more-->
+
 {{< table_of_contents >}}
 
 ## What's the plan?
