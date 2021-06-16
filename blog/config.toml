@@ -1,4 +1,5 @@
 baseURL = "https://blog.meadon.me/"
+title = "blog.meadon.me"
 languageCode = "en"
 DefaultContentLanguage = "en"
 theme = "anatole"
