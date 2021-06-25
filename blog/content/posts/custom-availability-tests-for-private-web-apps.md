@@ -23,7 +23,7 @@ All of the code used for this example solution can be found in [this GitHub repo
 
 ## Setting the scene
 
-I'll be using the scenario outlined in the diagram below to show this example.  We have an Azure Web App connected to a VNet using a private endpoint that we would like to set up Availability Tests for (this could easily be an app hosted on an Azure VM, in your own datacentre etc.).  Because the application is hosted privately, App Insights' testers can't access it - to work around this we have deployed an Azure Function configured with VNet integration which permits it to access the Web App.  This Function App will be running the custom Availability Test and feeding the results back to App Insights.
+I'll be using the scenario outlined in the diagram below to show this example.  We have an Azure Web App connected to a VNet using a private endpoint that we would like to set up Availability Tests for (this could easily be an app hosted on an Azure VM, in your own datacentre etc.).  Because the application is hosted privately, Azure's App Insights testing hosts can't access it - to work around this we have deployed an Azure Function configured with VNet integration which permits it to access the Web App.  This Function App will be running the custom Availability Test and feeding the results back to App Insights.
 
 ![design](/images/custom-availability-test-design.png)
 
