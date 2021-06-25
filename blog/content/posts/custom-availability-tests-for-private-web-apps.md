@@ -63,6 +63,8 @@ Unless there's a problem with your application of course - let's see what happen
 
 Notice the drop in availability.  It's up to what you do with this signal - wiring an alert up to fire when the availability drops below a given threshold (determined by your application's service level objectives) would probably be appropriate.
 
+The last thing to point out is how I was able to import the `PSCoreAppInsights` module and use some of its commands.  In this example I used Azure Functions' built-in [dependency management](https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-powershell?tabs=portal#dependency-management) system (although I normally prefer to package the dependencies up with the code to prevent slow cold starts - see [here](https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-powershell?tabs=portal#custom-modules) for more information).
+
 ## Run this for yourself
 
 If you'd like to see this in action you can deploy this example solution into your own Azure subscription - you will need the following:
