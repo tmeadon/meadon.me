@@ -10,6 +10,8 @@ tags:
 - azure-functions
 - app-insights
 - monitoring
+images:
+- /images/availability-tests.png
 ---
 [Availability Tests](https://docs.microsoft.com/en-us/azure/azure-monitor/app/availability-overview) are a great feature of Azure Application Insights.  They allow you to set up active [black box monitoring](https://sre.google/sre-book/monitoring-distributed-systems/) from points around the world so that you can measure your application's responsiveness and availability from outside of your environment.  There is one snag however: the built-in availability tests originate from hosts on the public internet which means your web app must be exposed for the tests to succeed.  
 
