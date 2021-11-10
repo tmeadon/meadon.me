@@ -1,13 +1,11 @@
-FROM golang:1.13
+FROM golang:1.13-alpine
 
 # VARIANT can be either 'hugo' for the standard version or 'hugo_extended' for the extended version.
-ARG VARIANT=hugo
+ARG VARIANT=hugo_extended
 # VERSION can be either 'latest' or a specific version number
 ARG VERSION=latest
 
-# Download and patch selected Hugo binary
-RUN apt-get update && apt-get install -y ca-certificates openssl git curl && \
-    rm -rf /var/lib/apt/lists/* && \
+RUN apk add --update --no-cache ca-certificates openssl git curl && \
     case ${VERSION} in \
     latest) \
     export VERSION=$(curl -s https://api.github.com/repos/gohugoio/hugo/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4)}') ;;\
@@ -19,13 +17,10 @@ RUN apt-get update && apt-get install -y ca-certificates openssl git curl && \
     go get github.com/yaegashi/muslstack && \
     muslstack -s 0x800000 /usr/bin/hugo
 
-# Copy patched hugo binary from build stage
-FROM mcr.microsoft.com/vscode/devcontainers/base
+FROM mcr.microsoft.com/vscode/devcontainers/base:0-alpine-3.12
+# Required for hugo_extended
+RUN apk add --update --no-cache libc6-compat
 COPY --from=0 /usr/bin/hugo /usr/bin
 EXPOSE 1313
-
-# [Optional] Uncomment this section to install additional OS packages you may want.
-#
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <your-package-list-here>
-
+WORKDIR /src
+CMD ["/usr/bin/hugo server"]

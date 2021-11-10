@@ -2,7 +2,7 @@
 title: "Testing PowerShell Azure Functions Part 1: Unit testing"
 date: 2020-11-08T10:48:01Z
 draft: true
-series: "Testing PowerShell Azure Functions"
+# series: "Testing PowerShell Azure Functions"
 ---
 Azure Functions provide a great way to run your PowerShell code, but how can you be sure that what you have built does what you intended it to do? Can you guarantee that the functionality you have built won't break when you or someone else adds or makes changes to the code at a later date?
 
