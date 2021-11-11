@@ -142,10 +142,10 @@ googleAnalytics = "UA-179786144-1"
       paginate = 6
 
     [params.social]
-    GitHub = "https://github.com/tmeadon"
-    Linkedin = "https://www.linkedin.com/in/tom-meadon-1052a7a6/"
-    Twitter = "https://twitter.com/tommagumma"
-    Instagram = "https://www.instagram.com/tom_meadon/"
+    GitHub = "tmeadon"
+    Linkedin = "tom-meadon-1052a7a6"
+    Twitter = "tommagumma"
+    Instagram = "tom_meadon"
     Email = "blog@meadon.me"
 
     [params.page]
