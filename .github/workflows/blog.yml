@@ -13,6 +13,7 @@ jobs:
       storageSasToken: ${{ secrets.BLOG_SAS_TOKEN }}
     
   prod:
+    needs: [stage]
     uses: tmeadon/meadon.me/.github/workflows/blog-deploy.yml@main
     with:
       siteBaseUrl: https://blog.meadon.me/
