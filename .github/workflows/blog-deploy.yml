@@ -1,0 +1,46 @@
+name: deploy
+
+on: 
+  workflow_call:
+    inputs:
+      siteBaseUrl:
+        type: string
+        required: true
+      storageContainerUri:
+        type: string
+        required: true
+      environment:
+        type: string
+        required: true
+    secrets:
+      storageSasToken:
+        required: true
+
+jobs:
+  build_deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environment }}
+      url: ${{ inputs.siteBaseUrl }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Hugo Setup
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.85.0'
+          extended: true
+
+      - name: Hugo build
+        run: hugo -b ${{ inputs.siteBaseUrl }} -s ./blog
+
+      - name: Copy to storage
+        env:
+          AZURE_STORAGE_URI: ${{ inputs.storageContainerUri }}
+          AZURE_STORAGE_SAS: ${{ secrets.storageSasToken }}
+        run: |
+          azcopy10 sync ./blog/public "${AZURE_STORAGE_URI}${AZURE_STORAGE_SAS}" --delete-destination=true
