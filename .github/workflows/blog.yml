@@ -5,7 +5,6 @@ on: [push]
 jobs:
   stage:
     runs-on: ubuntu-latest
-    needs: build
     environment:
       name: stage
       url: https://blogmeadonmestg.z33.web.core.windows.net/
