@@ -22,7 +22,7 @@ jobs:
         extended: true
 
     - name: Hugo build
-      run: hugo -b https://blogmeadonmestg.blob.core.windows.net/ -s ./blog
+      run: hugo -b https://blogmeadonmestg.z33.web.core.windows.net/ -s ./blog
 
     - name: Copy to storage
       env:
@@ -55,7 +55,7 @@ jobs:
 
     - name: Copy to storage
       env:
-        AZURE_STORAGE_URI: https://blogmeadonmestg.blob.core.windows.net/$web/
+        AZURE_STORAGE_URI: https://blogmeadonme.blob.core.windows.net/$web/
         AZURE_STORAGE_SAS: ${{ secrets.BLOG_SAS_TOKEN }}
       run: |
         azcopy10 sync ./blog/public "${AZURE_STORAGE_URI}${AZURE_STORAGE_SAS}" --delete-destination=true
