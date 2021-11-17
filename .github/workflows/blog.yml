@@ -22,7 +22,7 @@ jobs:
         extended: true
 
     - name: Hugo build
-      run: hugo -p https://blogmeadonmestg.blob.core.windows.net -s ./blog
+      run: hugo -b https://blogmeadonmestg.blob.core.windows.net -s ./blog
 
     - name: Copy to storage
       env:
@@ -51,7 +51,7 @@ jobs:
         extended: true
 
     - name: Hugo build
-      run: hugo -p https://blog.meadon.me -s ./blog
+      run: hugo -b https://blog.meadon.me -s ./blog
 
     - name: Copy to storage
       env:
