@@ -14,6 +14,7 @@ jobs:
     
   prod:
     needs: [stage]
+    if: github.ref == 'refs/heads/main'
     uses: tmeadon/meadon.me/.github/workflows/blog-deploy.yml@main
     with:
       siteBaseUrl: https://blog.meadon.me/
