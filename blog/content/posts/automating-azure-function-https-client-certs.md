@@ -128,4 +128,4 @@ By this point our Function App should now be in the position where it can establ
 
 To make this code more usable I have written a set of PowerShell functions which can be invoked by a script/pipeline task - see below.  I have added some extra functionality to the functions below to make the whole thing more efficient, for example by only uploading certificates that haven't already been uploaded (this helps when this is run multiple times in a pipeline).  Also, by splitting the code up into small functions like this I have made the next task on my to do list a breeze: writing Pester tests.  Until then, feel free to get in touch if you have any questions - cheers!
 
-{{< gist tmeadon c27f76d51c2cf0da15ec7f753cca88ca >}}
+{{< gist tmeadon ff0181fe91dc93e9f209219fd1599fd6 >}}
