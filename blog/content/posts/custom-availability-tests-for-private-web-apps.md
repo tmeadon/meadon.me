@@ -20,7 +20,7 @@ In this post I'll show you how you can run your own availability tests from a ho
 
 <!--more-->
 
-All of the code used for this example solution can be found in [this GitHub repo](https://github.com/tommagumma/custom-availability-test-example).
+All of the code used for this example solution can be found in [this GitHub repo](https://github.com/tmeadon/custom-availability-test-example).
 
 ## Setting the scene
 
@@ -30,15 +30,15 @@ I'll be using the scenario outlined in the diagram below to show this example.  
 
 ## Function app
 
-Let's have a look at the Function App which can be found in the `./FunctionApp` directory in the [GitHub repo](https://github.com/tommagumma/custom-availability-test-example).  We have a single function called `RunAvailabilityTest` which is configured with a timer trigger - here's the `function.json` file which defines the trigger:
+Let's have a look at the Function App which can be found in the `./FunctionApp` directory in the [GitHub repo](https://github.com/tmeadon/custom-availability-test-example).  We have a single function called `RunAvailabilityTest` which is configured with a timer trigger - here's the `function.json` file which defines the trigger:
 
-{{< gist tommagumma 45be49f43884ae49ef582263dec176b6 "function.json" >}}
+{{< gist tmeadon 45be49f43884ae49ef582263dec176b6 "function.json" >}}
 
 The `schedule` property contains a cron expression which tells the function to run once every minute - I kept the frequency high because I get impatient when I'm testing :eyes:.  You can change this to whatever frequency is suitable for the web application you're monitoring.  Take a look at the [docs](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer?tabs=powershell) for more information about this type of trigger.
 
 Next let's look at the `run.ps1` file which contains the actual monitoring code:
 
-{{< gist tommagumma 45be49f43884ae49ef582263dec176b6 "run.ps1" >}}
+{{< gist tmeadon 45be49f43884ae49ef582263dec176b6 "run.ps1" >}}
 
 Firstly we construct the URL of the web application using app's hostname which is passed in using an [environment variable](https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-powershell?tabs=portal#environment-variables).  In my example this variable is set dynamically during the infrastructure deployment (using the output of the web app's deployment) however this could equally be set by a pipeline or some other deployment process.
 
@@ -73,7 +73,7 @@ If you'd like to see this in action you can deploy this example solution into yo
 - An Azure subscription
 - An app registration with rights to create Resource Groups and deploy resources in the subscription
 
-1. Fork the example's [GitHub repo](https://github.com/tommagumma/custom-availability-test-example)
+1. Fork the example's [GitHub repo](https://github.com/tmeadon/custom-availability-test-example)
 2. Create a secret in the new repo called `AZURE_CREDENTIALS` and add the following JSON replacing the values below for your app registration as appropriate:
 
    ```json
