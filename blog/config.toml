@@ -38,6 +38,7 @@ googleAnalytics = "UA-179786144-1"
   defaultTheme = "auto"
   dateFormat = "2006-01-02"
   images = ["/images/profile.jpg"]
+  summaryLength = 100
 
   [params.app]
     title = "Tom Meadon"

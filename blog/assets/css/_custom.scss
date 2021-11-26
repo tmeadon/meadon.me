@@ -1,3 +1,7 @@
 .home .home-profile .home-avatar img {
     width: 9rem;
 }
+
+.home[posts] .summary .content {
+    -webkit-line-clamp: 10;
+}
