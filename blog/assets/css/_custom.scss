@@ -5,3 +5,9 @@
 .home[posts] .summary .content {
     -webkit-line-clamp: 10;
 }
+
+.single .content img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
