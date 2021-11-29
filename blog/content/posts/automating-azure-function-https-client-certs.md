@@ -12,6 +12,7 @@ tags:
 - security
 images:
 - /images/azure-functions-pwsh-certs.png
+featuredImage: /images/azure-functions-pwsh-certs-small.png
 summary: | 
     This post describes an approach for automating the management of private client HTTPS certificates in your Azure Function Apps.
 ---
