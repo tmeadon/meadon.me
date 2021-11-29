@@ -92,6 +92,6 @@ If you'd like to see this in action you can deploy this example solution into yo
 
 ## Alternatives to PowerShell
 
-Of course, PowerShell isn't the only way to send test results back to App Insights.  Here's a [great article](https://dotnetthoughts.net/running-custom-availability-tests-azure-functions/) showing how you can do something similar using C#.  The [Node.js](https://docs.microsoft.com/en-us/azure/azure-monitor/app/nodejs) App Insights APIs should also be able to track availability test results - there's even an (unsupported) [SDK for golang](https://github.com/microsoft/ApplicationInsights-Go) for the cool kids out there.
+Of course, PowerShell isn't the only way to send test results back to App Insights.  Here's a [great article](https://dotnetthoughts.net/running-custom-availability-tests-azure-functions/) showing how you can do something similar using C#.  The [Node.js](https://docs.microsoft.com/en-us/azure/azure-monitor/app/nodejs) App Insights APIs should also be able to track availability test results - there's even an (unsupported) [SDK for golang](https://github.com/microsoft/ApplicationInsights-Go).
 
 Availability tests are a great way to implement black box monitoring which is an important component of any monitoring solution - hopefully this example solution will help you to use this tool when your application is hosted in a private network.  Happy monitoring :collision:
