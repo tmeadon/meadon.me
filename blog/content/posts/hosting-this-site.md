@@ -19,8 +19,6 @@ For my first post I thought I would write about the end-to-end process I followe
 
 <!--more-->
 
-{{< table_of_contents >}}
-
 ## What's the plan?
 
 The first decision I made by way of design for the site was that it should be static - to my mind there's no need for me to run (and pay for!) a stateful web server (along with the security and reliability implications) when all I'm looking to do is serve up some simple blog pages.  I soon discovered that there's a ton of great static site generators available so, in the most scientific way possible, I picked one almost totally at random: [Hugo](https://gohugo.io/).  My plan was to spend a short amount of time with Hugo and then select a different generator if it seemed too challenging - as you'll see, it didn't come to that.
