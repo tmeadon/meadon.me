@@ -8,6 +8,9 @@ tags:
 - chaos
 - azure
 - bicep
+
+toc:
+  auto: false
 ---
 
 Wy wife and I live in a small, fairly calm town in the UK and we love it - the peace and quiet suits us perfectly.  That being said, everyone needs a dose of chaos in their lives from time to time, so this weekend I decided to take a look at the preview release of Azure Chaos Studio to find out how I can use it to breach the peace of my Azure deployments 😇
@@ -28,7 +31,7 @@ Azure Chaos Studio is Microsoft's answer to **chaos engineering**, a methodology
 
 > *... the discipline of experimenting on a system in order to build confidence in the system’s capability to withstand turbulent conditions in production.*
 
-The notion is to evaluate the resilience of a system by intentionally injecting faults (such as simulated network failures, or high resource usage conditions) and measuring the effect.  If we observe a negative impact on the system (such as increased HTTP error codes), then we can re-design it to add the necessary reinforcements to protect the it from real-life failures of the same nature.
+The notion is to evaluate the resilience of a system by intentionally injecting faults (such as simulated network failures, or high resource usage conditions) and measuring the effect.  If we observe a negative impact on the system (such as increased HTTP error codes for example), then we can re-design it to add the necessary reinforcements to protect it from real-life failures of the same nature.
 
 There are a number of OSS tools available to help you practice chaos engineering, such as [Netflix's Chaos Monkey](https://netflix.github.io/chaosmonkey/) and [LitmusChaos](https://github.com/litmuschaos/litmus), and of course there's nothing stopping you from writing custom scripts to simulate specific failures.  This is where Azure Chaos Studio comes in - it offers a **fully-managed** service which enables you to perform chaos experiments in a safe and controlled way.  Chaos Studio has several important benefits:
 
@@ -39,10 +42,84 @@ There are a number of OSS tools available to help you practice chaos engineering
 
 Go and have a look at the [documentation](https://docs.microsoft.com/en-us/azure/chaos-studio/chaos-studio-overview) if you want to find out more about Chaos Studio.  We're going to move on now and look at an example...
 
-## Test Environment
+## The Test Environment
 
-Before we can start causing trouble we need to have something to experiment on.  I decided to use a familiar architecture as a subject for my first experiment - I deployed a pair of web servers running a very basic 'Hello World' Node.js application behind a public load balancer.  The application responds to HTTP requests with a message containing the VM's hostname.
+Before we can start causing trouble we need to have something to experiment on.  I decided to use a familiar architecture as a subject for my first experiment - I deployed a pair of web servers running a very basic 'Hello World' Node.js application behind a public load balancer.  The application responds to HTTP requests with a message containing the VM's hostname.  There is also an NSG attached to the VMs' subnet which allows inbound connections to TCP port 80.
 
 ![infrastructure](/images/chaos-part-1-infra.svg)
 
 This infrastructure was deployed using the Bicep files contained in the [iac](https://github.com/tmeadon/azure-chaos-studio-playground/tree/bad-lb-config/iac) directory in the `bad-lb-config` branch of GitHub repo I mentioned earlier.  Why have I used that name for the branch you ask?  It will become apparent later, but the eagle-eyed among you might notice something missing from the load balancer configuration in `lb.bicep`... 😉
+
+## Building a Chaos Experiment
+
+Before building an Experiment the first thing you need to do is to choose a fault from the [fault and action library](https://docs.microsoft.com/en-gb/azure/chaos-studio/chaos-studio-fault-library) that you'd like to inject.  There are two types of faults: *agent-based* and *service-based*.  Agent-based faults require the installation of the Azure Chaos Studio agent on your VM(s) whereas the service-based faults operate against the Azure control plane.  
+
+I decided that I wanted to see the effect of one of my VMs becoming disconnected from the load balancer which *should* be something this design can tolerate.  To simulate this scenario we can use the [Network Security Group (set rules)](https://docs.microsoft.com/en-gb/azure/chaos-studio/chaos-studio-fault-library#network-security-group-set-rules) fault to add a rule to our NSG that blocks inbound traffic to one of the backend VMs.  Since this is a service-direct fault, we don't need to worry about installing any software on our VMs.
+
+### Step 1: Onboarding the Target Resources
+
+Before Azure Chaos Studio can start modifying resources, those resources need to be enabled as *targets* and the specific faults we're interested in need to be enabled as *capabilities*.  In our case, that means we need to enable our NSG as a target, and enable the security rule capability.  This process is part of the [multi-layered protection](https://docs.microsoft.com/en-gb/azure/chaos-studio/chaos-studio-permissions-security) built into Azure Chaos Studio to prevent unexpected changes to your environment.
+
+Chaos targets are extension resources which are created as children of the resources that are being enabled in Chaos Studio.  The name of the target correlates to the name of the [fault provider](https://docs.microsoft.com/en-gb/azure/chaos-studio/chaos-studio-fault-providers) for the fault we're looking to enable - in our case it will be called `Microsoft-NetworkSecurityGroup`.
+
+Capabilities are child resources of targets and represent the fault that they enable.  The name of the capability that we need to enable is called `SecurityRule-1.0`.
+
+To enable my NSG in Chaos Studio I wrote a simple bicep module - [nsg-capabilities.bicep](https://github.com/tmeadon/azure-chaos-studio-playground/blob/main/iac/chaos/capabilities/nsg-capabilities.bicep) - that will create the `Microsoft-NetworkSecurityGroup` target and the `SecurityRule-1.0` capability on a given NSG:
+
+```c#
+param nsgName string
+param location string = 'uksouth'
+
+// get a reference to the existing nsg
+resource nsg 'Microsoft.Network/networkSecurityGroups@2021-03-01' existing = {
+  name: nsgName
+}
+
+// create a 'Microsoft-NetworkSecurityGroup' target on the the nsg 
+resource nsgTarget 'Microsoft.Network/networkSecurityGroups/providers/targets@2021-09-15-preview' = {
+  name: '${nsg.name}/Microsoft.Chaos/Microsoft-NetworkSecurityGroup'
+  location: location
+  properties: {}
+
+  // create the capability
+  resource setRules 'capabilities' = {
+    name: 'SecurityRule-1.0'
+    location: location
+  }
+}
+```
+
+After deploying that bicep module, we can see that our NSG has lit up in Chaos Studio in the Azure Portal:
+
+![enabled_target](/images/chaos-part-1-enabled-targets-ss.png)
+
+### Step 2: Creating the Experiment
+
+Chaos experiments are made up of two sections: *selectors* and *steps*.  Selectors are groups of target resources - such as a list of VMs - and steps define what happens to those resources.  Steps run sequentially and can contain one or more branches which run in parallel.  Each branch contains one or more actions which are the actual faults that you want to inject and often require parameters.  This structure allows you to build quite complex experiments - we, however, are going to keep things very simple.  We're going to build an experiment with one selector containing our NSG and one step with a single branch and a single action.
+
+The bicep module [disconnect-half-vms.bicep](https://github.com/tmeadon/azure-chaos-studio-playground/blob/main/iac/chaos/experiments/disconnect-half-vms.bicep) takes a list of VM private IP addresses and configures a chaos experiment which will add a rule to our NSG which will deny all traffic to *half* of the IP addresses for 5 minutes.  Once deployed, the experiment looks something like:
+
+![experiment](/images/chaos-part-1-experiment.png)
+
+### Step 3: Assigning Permissions
+
+Before we can run the experiment we need to assign the associated system-managed identity with the permissions it needs to modify the NSG. In the [fault provider documentation](https://docs.microsoft.com/en-gb/azure/chaos-studio/chaos-studio-fault-providers), Microsoft suggest providing the experiment's identity with the 'Network Contributor' role for this particular fault.  I'm going to take them up on this to keep things simple, although in reality I would recommend crafting a custom role with the specific NSG-related actions - the 'Network Contributor' role feels quite wide to me.
+
+The bicep module [disconnect-half-vms-perms.bicep](https://github.com/tmeadon/azure-chaos-studio-playground/blob/main/iac/chaos/experiments/disconnect-half-vms-perms.bicep) applies the necessary permissions.  It is called by the `disconnect-half-vms.bicep` module which passes in the principal ID for the experiment's system-assigned identity.
+
+## Running the Experiment
+
+Now we can actually run the experiment.  At time of writing there isn't any support for Azure Chaos Studio in the Azure CLI or Azure PowerShell, so to start the experiment we can either use the Portal or use the [REST API](https://docs.microsoft.com/en-gb/azure/chaos-studio/chaos-studio-tutorial-service-direct-cli#run-your-experiment).  
+
+To observe the effect of the experiment I'll use the following piece of PowerShell - which will loop forever calling the load balancer's public IP, output the message returned by the Node.js application and then sleep for a second.
+
+```powershell
+$publicIp = <enter_public_ip>
+
+while ($true) 
+{
+    Invoke-RestMethod -Uri $publicIp -TimeoutSec 2
+    Start-Sleep 1
+}
+```
+
