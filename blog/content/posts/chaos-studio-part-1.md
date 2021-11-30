@@ -3,7 +3,7 @@ title: "Raising Chaos Part 1: Creating and Running Experiments with Azure Chaos 
 subtitle: "An explanation of how to configure and run Azure Chaos Studio Experiments using Bicep and the Azure CLI"
 description: "An explanation of how to configure and run Azure Chaos Studio Experiments using Bicep and the Azure CLI"
 date: 2021-11-26T14:53:48Z
-draft: true
+draft: false
 tags:
 - chaos
 - azure
