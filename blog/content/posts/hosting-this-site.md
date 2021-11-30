@@ -38,7 +38,7 @@ code .
 
 Once VS Code loaded I used the Command Palette (`F1`), selected `Remote-Containers: Open Folder in Container` and chose the current directory.  The next prompt asked me to select a container image for this project and on the off chance that one already existed for Hugo, I selected `Show All Definitions...` and searched for "hugo".  I was very happily surprised to find an existing image!
 
-![Hugo container](/images/hugo-dev-container_0.gif)
+{{< figure src="/images/hugo-dev-container_0.gif" alt="gif of hugo dev container" >}}
 
 After the container image downloaded and span up VS Code presented me with my new project directory, a `zsh` shell to play with and a couple of files in a new directory called `.devcontainer`.  As a quick test to see that all was well in my new environment I ran `hugo version` which returned `Hugo Static Site Generator v0.75.1...`.  Great, time to make a start.
 

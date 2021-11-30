@@ -26,7 +26,7 @@ All of the code used for this example solution can be found in [this GitHub repo
 
 I'll be using the scenario outlined in the diagram below to show this example.  We have an Azure Web App connected to a VNet using a private endpoint that we would like to set up Availability Tests for (this could easily be an app hosted on an Azure VM, in your own datacentre etc.).  Because the application is hosted privately, Azure's App Insights testing hosts can't access it - to work around this we have deployed an Azure Function configured with VNet integration which permits it to access the Web App.  This Function App will be running the custom Availability Test and feeding the results back to App Insights.
 
-![design](/images/custom-availability-test-design.png)
+{{< figure src="/images/custom-availability-test-design.png" alt="solution design diagram" >}}
 
 ## Function app
 
@@ -56,11 +56,11 @@ Once we have the result of the test we can then use a couple of commands from th
 
 When this is up and running you should see something like the screenshot below in the 'Availability' section of your App Insights account:
 
-![success-screenshot](/images/availability-test-success-screenshot.png)
+{{< figure src="/images/availability-test-success-screenshot.png" alt="availability test success screenshot" >}}
 
 Unless there's a problem with your application of course - let's see what happens when I stop the web app:
 
-![fail-screenshot](/images/availability-test-fail-screenshot.png)
+{{< figure src="/images/availability-test-fail-screenshot.png" alt="availability test fail screenshot" >}}
 
 Notice the drop in availability.  It's up to what you do with this signal - wiring an alert up to fire when the availability drops below a given threshold (determined by your application's service level objectives) would probably be appropriate.
 
