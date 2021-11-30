@@ -12,10 +12,30 @@
     margin-right: auto;
 }
 
+.single .content figure img {
+    padding: 10px;
+}
+
 .page {
     max-width: 950px;
 }
 
 .single .featured-image img.lazyloaded {
     width: auto;
+}
+
+.home[posts] .summary {
+    border-bottom: 1px dashed #e2e2e2
+}
+
+.home[posts] .summary .featured-image-preview {
+    padding: 0;
+}
+
+.home[posts] .summary .featured-image-preview img {
+    display: block;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
 }
