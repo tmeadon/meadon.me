@@ -14,6 +14,7 @@ images:
 - /images/pwsh_functions.png
 featuredImage: /images/pwsh_functions.png
 ---
+
 Recently I needed to pull some information out of several Azure Function Apps as a final task in their deployment pipeline and I found that my go-to Azure PowerShell commands did not give me what I needed.  This post describes how you can use the Azure REST API when your favourite tools don't quite cut the mustard.
 
 <!--more-->
