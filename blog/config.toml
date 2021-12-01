@@ -261,7 +261,7 @@ googleAnalytics = "UA-179786144-1"
 
   # LoveIt NEW | 0.2.0 Analytics config
   [params.analytics]
-    enable = false
+    enable = true
     # Google Analytics
     [params.analytics.google]
       id = "UA-179786144-1"
