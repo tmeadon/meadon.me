@@ -1,4 +1,4 @@
-FROM golang:1.13-alpine
+FROM golang:1.19.5-alpine3.17
 
 # VARIANT can be either 'hugo' for the standard version or 'hugo_extended' for the extended version.
 ARG VARIANT=hugo_extended
@@ -14,13 +14,15 @@ RUN apk add --update --no-cache ca-certificates openssl git curl && \
     wget -O ${VERSION}.tar.gz https://github.com/gohugoio/hugo/releases/download/v${VERSION}/${VARIANT}_${VERSION}_Linux-64bit.tar.gz && \
     tar xf ${VERSION}.tar.gz && \
     mv hugo* /usr/bin/hugo && \
-    go get github.com/yaegashi/muslstack && \
+    go install github.com/yaegashi/muslstack@latest && \
     muslstack -s 0x800000 /usr/bin/hugo
 
-FROM mcr.microsoft.com/vscode/devcontainers/base:0-alpine-3.12
+FROM mcr.microsoft.com/vscode/devcontainers/base:0-alpine-3.17
 # Required for hugo_extended
 RUN apk add --update --no-cache libc6-compat
 COPY --from=0 /usr/bin/hugo /usr/bin
+COPY --from=0 /usr/local/go/ /usr/local/go/
+ENV PATH="${PATH}:/usr/local/go/bin"
 EXPOSE 1313
 WORKDIR /src
 CMD ["/usr/bin/hugo server"]
