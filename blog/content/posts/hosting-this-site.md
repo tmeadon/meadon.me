@@ -3,15 +3,8 @@ author:
 title: "Hosting this static site: Hugo, Azure Storage, Cloudflare & GitHub Actions"
 date: 2020-09-24T08:12:17Z
 draft: false
-categories:
-- How To
 tags:
-- hugo
-- containers
-- azure
-- ci-cd
-- github-actions
-- web
+- tech
 ---
 Welcome to my blog!
 

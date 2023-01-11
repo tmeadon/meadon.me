@@ -1,82 +1,43 @@
-<head>
-    <link rel="me" href="https://hachyderm.io/@tommeadon">
+<link rel="me" href="https://hachyderm.io/@tommeadon">
 
-    {{ partial "seo_schema" . }}
-    <title> {{.Site.Params.author}}{{ with .Title }} | {{ . }}{{ end }} </title>
+{{ partial "seo_schema" . }}
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">    
+<meta name="viewport" content="width=device-width,minimum-scale=1">
+<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
+{{ hugo.Generator }}
+{{/* NOTE: For Production make sure you add `HUGO_ENV="production"` before your build command */}}
+{{ if eq (getenv "HUGO_ENV") "production" | or (eq .Site.Params.env "production")  }}
+  <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+{{ else }}
+  <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+{{ end }}
 
-    <!-- Meta -->
-    <meta charset="utf-8">
-    {{- hugo.Generator -}}
-    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-    <meta name="description" content="{{ .Site.Params.description }}">
-    {{- if .Site.Params.googleSiteVerify }}
-    <meta name="google-site-verification" content="{{ .Site.Params.googleSiteVerify }}">
-    {{- end -}}
+<link rel="stylesheet" href="{{ "/css/style.css" | relURL }}">
 
-    <!-- CSS -->
-    {{ $style := resources.Get "css/style.css" | resources.Minify | resources.Fingerprint }}
-    <link rel="stylesheet"
-          href="{{ $style.Permalink }}"
-          integrity="{{ $style.Data.Integrity }}"
-          crossorigin="anonymous"
-          type="text/css">
-    {{- $css := "" -}}
-    {{- range .Site.Params.customCss -}}
-    {{ $css := resources.Get . | fingerprint }}
-    <link rel="stylesheet"
-          href="{{ $css.Permalink }}"
-          integrity="{{ $css.Data.Integrity }}"
-          crossorigin="anonymous"
-          type="text/css">
-    {{- end -}}
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+{{ range .Site.Params.customCSS }}
+  {{ if ( or ( hasPrefix . "http://" ) ( hasPrefix . "https://" ) ) }}
+    <!-- remote css -->
+    <link rel="stylesheet" href="{{ . }}">
+  {{ else }}
+    <!-- local css -->
+    <link rel="stylesheet" href="{{ $.Site.BaseURL }}{{ . }}">
+  {{ end }}
+{{ end }}
 
-    <!-- Favicons -->
-    <link rel="shortcut icon" href="{{ .Site.Params.favicon | absURL }}favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ .Site.Params.favicon | absURL }}apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ .Site.Params.favicon | absURL }}favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ .Site.Params.favicon | absURL }}favicon-16x16.png">
+<link rel="shortcut icon" href="{{ "/images/favicon.ico" | relURL }}" type="image/x-icon" />
 
-    <link rel="canonical" href="{{ .Permalink }}">
+{{ if .Site.Params.enableGoogleAnalytics }} 
+    {{ template "_internal/google_analytics_async.html" . }}
+{{ end }}
 
-    <!-- RSS -->
-    {{ with .OutputFormats.Get "rss" -}}
-        {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
-    {{ end -}}
+{{ if or .Params.math .Site.Params.math }}
+  {{ partial "math.html" . }}
+{{ end }}
 
-    <!-- JavaScript -->
-    {{ $anatole := resources.Get "js/anatole-header.js" }}
-    {{ $secureJS := $anatole |  resources.Minify | resources.Fingerprint }}
-    <script type="text/javascript"
-            src="{{ $secureJS.Permalink }}"
-            integrity="{{ $secureJS.Data.Integrity }}"
-            crossorigin="anonymous"></script>
-
-    {{- $js := "" -}}
-    {{- range .Site.Params.customJs -}}
-        {{- if or (in . "http://") (in . "https://") -}}
-            <script src="{{ . | relURL }}"></script>
-        {{- else -}}
-            {{- $customJS := resources.Get . -}}
-            {{- if $customJS -}}
-                {{- if eq $js "" -}}
-                    {{- $js = $customJS -}}
-                {{- else -}}
-                    {{- $js = slice $js $customJS | resources.Concat "js/custom.js" -}}
-                {{- end -}}
-            {{- end -}}
-        {{- end -}}
-    {{- end -}}
-
-    {{- if ne $js "" -}}
-    {{- $secureJS := $js |  resources.Minify | resources.Fingerprint -}}
-    <script type="text/javascript"
-            src="{{ $secureJS.Permalink }}"
-            integrity="{{ $secureJS.Data.Integrity }}"
-            crossorigin="anonymous"></script>
-    {{- end -}}
-
-    <!-- Twitter Cards -->
-    {{ template "_internal/twitter_cards.html" . }}
-</head>
+{{ if .OutputFormats.Get "RSS" }}
+  {{ with .OutputFormats.Get "RSS" }}
+    <link href="{{ .RelPermalink }}" rel="alternate" type="application/rss+xml" title="{{ $.Site.Title }}" />
+    <link href="{{ .RelPermalink }}" rel="feed" type="application/rss+xml" title="{{ $.Site.Title }}" />
+  {{ end }}
+{{ end }}
