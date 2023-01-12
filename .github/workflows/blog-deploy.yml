@@ -36,7 +36,7 @@ jobs:
           extended: true
 
       - name: Hugo build
-        run: hugo -b ${{ inputs.siteBaseUrl }} -s ./site 
+        run: hugo -b ${{ inputs.siteBaseUrl }} -s ./site
 
       - name: Copy to storage
         env:
