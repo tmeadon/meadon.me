@@ -14,3 +14,7 @@ body {
 figure {
     text-align: center;
 }
+
+figure img {
+    max-width: 100%;
+}
