@@ -18,3 +18,7 @@ figure {
 figure img {
     max-width: 100%;
 }
+
+pre code {
+    font-size: 14px;
+}
