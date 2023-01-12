@@ -36,11 +36,11 @@ jobs:
           extended: true
 
       - name: Hugo build
-        run: hugo -b ${{ inputs.siteBaseUrl }} -s ./blog
+        run: hugo -b ${{ inputs.siteBaseUrl }} -s ./site
 
       - name: Copy to storage
         env:
           AZURE_STORAGE_URI: ${{ inputs.storageContainerUri }}
           AZURE_STORAGE_SAS: ${{ secrets.storageSasToken }}
         run: |
-          azcopy10 sync ./blog/public "${AZURE_STORAGE_URI}${AZURE_STORAGE_SAS}" --delete-destination=true
+          azcopy10 sync ./site/public "${AZURE_STORAGE_URI}${AZURE_STORAGE_SAS}" --delete-destination=true
