@@ -50,7 +50,7 @@ The `$chain` variable will now contain a collection of certificates (or more pre
 
 ### Uploading the certificates
 
-Now that we've got our hands on our service's full HTTPS certificate chain we can proceed with uploading the certificates to our Function App.  Unfortunately (at time of writing) this task isn't supported by Azure PowerShell or the Azure CLI so we'll need to turn to Azure's REST API to accomplish this (see [my article](https://blog.meadon.me/posts/extracting-function-app-info-rest-api/) for more information about using the REST API), specifically the ['Create Or Update Public Certificate'](https://docs.microsoft.com/en-us/rest/api/appservice/webapps/createorupdatepubliccertificate) API.
+Now that we've got our hands on our service's full HTTPS certificate chain we can proceed with uploading the certificates to our Function App.  Unfortunately (at time of writing) this task isn't supported by Azure PowerShell or the Azure CLI so we'll need to turn to Azure's REST API to accomplish this (see [my article](https://meadon.net/posts/extracting-function-app-info-rest-api/) for more information about using the REST API), specifically the ['Create Or Update Public Certificate'](https://docs.microsoft.com/en-us/rest/api/appservice/webapps/createorupdatepubliccertificate) API.
 
 According to the documentation we'll need to call the API once for each certificate we wish to upload with a request body containing a byte array representation of the certificate as well as a target local certificate store ([options can be found here](https://docs.microsoft.com/en-us/rest/api/appservice/webapps/createorupdatepubliccertificate#publiccertificatelocation) - we'll be using `LocalMachineMy`).  The outline for this stage of the process is as follows:
 

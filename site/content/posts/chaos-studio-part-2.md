@@ -6,13 +6,13 @@ tags:
 - tech
 ---
 
-In [part 1](https://blog.meadon.me/chaos-studio-part-1/) of this mini series I talked about some of the basics of Chaos Engineering and how Azure Chaos Studio can be used to perform experiments in a reliable, repeatable and safe manner.  In this blog post I'll be looking at how to automate the execution and observation of the experiment I created previously to enable us to add regular resiliency testing to our development lifecycle.  
+In [part 1](https://meadon.net/chaos-studio-part-1/) of this mini series I talked about some of the basics of Chaos Engineering and how Azure Chaos Studio can be used to perform experiments in a reliable, repeatable and safe manner.  In this blog post I'll be looking at how to automate the execution and observation of the experiment I created previously to enable us to add regular resiliency testing to our development lifecycle.  
 
 <!--more-->
 
 By including resiliency testing in our CI/CD pipeline we can increase the chance of catching changes that will degrade our system's resiliency before they are released to production.  It is common to perform end-to-end tests, load tests, stress tests and security tests before releasing changes to a system and resiliency testing is another great string to add to your bow.
 
-In this post I'll be building upon the same [GitHub repo](https://github.com/tmeadon/azure-chaos-studio-playground) as [part 1](https://blog.meadon.me/chaos-studio-part-1/) - you'll find all the code discussed in this article in there.
+In this post I'll be building upon the same [GitHub repo](https://github.com/tmeadon/azure-chaos-studio-playground) as [part 1](https://meadon.net/chaos-studio-part-1/) - you'll find all the code discussed in this article in there.
 
 ## The Tools
 
@@ -20,11 +20,11 @@ In the previous post I demonstrated how to build Azure Chaos Studio using Bicep 
 
 ### GitHub Actions
 
-In the unlikely event of you not being aware of what GitHub Actions are then I'd recommend you visit [github.com](https://github.com/features/actions) to find out more.  I'll be using GitHub Actions to build a pipeline (or "Workflow" using GitHub's lingo) that deploys an instance of my test infrastructure (see [The Test Environment](https://blog.meadon.me/chaos-studio-part-1/#the-test-environment) for a reminder on what this looks like), initiates my Azure Chaos Studio experiment and then runs a load test to observe the effect of the experiment.
+In the unlikely event of you not being aware of what GitHub Actions are then I'd recommend you visit [github.com](https://github.com/features/actions) to find out more.  I'll be using GitHub Actions to build a pipeline (or "Workflow" using GitHub's lingo) that deploys an instance of my test infrastructure (see [The Test Environment](https://meadon.net/chaos-studio-part-1/#the-test-environment) for a reminder on what this looks like), initiates my Azure Chaos Studio experiment and then runs a load test to observe the effect of the experiment.
 
 ### k6
 
-[k6](https://k6.io/) is an open source load testing tool which can execute tests written in JavaScript.  It allows you to define checks and thresholds which can be used to set pass/fail criteria on test executions.  We'll be using k6 to observe the results of the chaos experiment and report the result back to the GitHub Actions Workflow.  In [part 1](https://blog.meadon.me/chaos-studio-part-1/#running-the-experiment) I used a small piece of PowerShell for this which was great for quick interactive testing - I decided to replace this with k6 rather than having to write the threshold and reporting logic myself.
+[k6](https://k6.io/) is an open source load testing tool which can execute tests written in JavaScript.  It allows you to define checks and thresholds which can be used to set pass/fail criteria on test executions.  We'll be using k6 to observe the results of the chaos experiment and report the result back to the GitHub Actions Workflow.  In [part 1](https://meadon.net/chaos-studio-part-1/#running-the-experiment) I used a small piece of PowerShell for this which was great for quick interactive testing - I decided to replace this with k6 rather than having to write the threshold and reporting logic myself.
 
 k6 have a [GitHub Action](https://github.com/grafana/k6-action) available too which will make running the test in the Workflow very simple to configure.
 
@@ -85,7 +85,7 @@ The code for this job is as follows:
 
 ### Building the Test Execution Job
 
-This job is a little bit more involved.  I had two things to figure out before I could build the job: firstly, in [part 1](https://blog.meadon.me/chaos-studio-part-1/#running-the-experiment) I used the Azure Portal to start the Chaos Experiment, so I needed to find a way to do this programmatically; secondly, I needed to write the k6 test that would perform the observation.
+This job is a little bit more involved.  I had two things to figure out before I could build the job: firstly, in [part 1](https://meadon.net/chaos-studio-part-1/#running-the-experiment) I used the Azure Portal to start the Chaos Experiment, so I needed to find a way to do this programmatically; secondly, I needed to write the k6 test that would perform the observation.
 
 #### Initiating the Experiment
 

@@ -17,7 +17,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     uses: tmeadon/meadon.me/.github/workflows/blog-deploy.yml@main
     with:
-      siteBaseUrl: https://blog.meadon.me/
+      siteBaseUrl: https://meadon.net/
       storageContainerUri: https://blogmeadonme.blob.core.windows.net/$web/
       environment: prod
     secrets:
