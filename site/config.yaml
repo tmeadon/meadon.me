@@ -1,4 +1,4 @@
-baseURL: https://blog.meadon.me/
+baseURL: https://meadon.net/
 languageCode: en-gb
 title: Tom Meadon
 theme: github.com/nodejh/hugo-theme-mini
@@ -6,16 +6,13 @@ theme: github.com/nodejh/hugo-theme-mini
 # Default content language, support en (English) / zh (Chinese) / nl (Dutch) / fr (French) / es (Spanish), default 'en'
 defaultContentLanguage: en
 
-# !!! exampleSite only, you may need to delete the line: `themesDir: ../../` 
-# themesDir: ../../
-
 hasCJKLanguage: true
 permalinks:
   posts: /posts/:title/
 
 paginate: 3
 
-# googleAnalytics: your-google-analytics-id
+googleAnalytics: UA-179786144-1
 # disqusShortname: your-disqus-shortname
 
 # Hugo Configure Markup
@@ -46,7 +43,7 @@ params:
   # Author biography
   bio: Dad (to be) and CTO
   # Site Description, used in HTML meat
-  description: blog.meadon.me
+  description: Tom Meadon
 
 
   ###########################################
