@@ -1,18 +1,9 @@
 ---
 title: "Raising Chaos Part 1: Creating and Running Experiments with Azure Chaos Studio"
-subtitle: "An explanation of how to configure and run Azure Chaos Studio Experiments using Bicep"
-description: "An explanation of how to configure and run Azure Chaos Studio Experiments using Bicep"
 date: 2021-11-26T14:53:48Z
 draft: false
 tags:
-- chaos
-- azure
-- bicep
-toc:
-  auto: false
-images:
-- /images/chaos-part-1-featured.png
-featuredImage: /images/chaos-part-1-featured.png
+- tech
 ---
 
 Wy wife and I live in a small, fairly calm town in the UK and we love it - the peace and quiet suits us perfectly.  That being said, everyone needs a dose of chaos in their lives from time to time, so this weekend I decided to take a look at the preview release of Azure Chaos Studio to find out how I can use it to breach the peace of my Azure deployments 😇
@@ -22,10 +13,6 @@ Wy wife and I live in a small, fairly calm town in the UK and we love it - the p
 In this post I will explain how to build a basic Chaos experiment and use it to kick the tyres on a simple Azure deployment.
 
 I'll be using Bicep (if you haven't checked Bicep out yet then I would highly recommend you do so - you can [start here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/overview)) to provision a Chaos Studio Experiment as well as the resources which will be the subject of the Experiment.  All of the code can be found in [this GitHub repo](https://github.com/tmeadon/azure-chaos-studio-playground).
-
-{{< admonition type=info >}}
-The Azure Chaos Studio service is currently in public preview so it's best you avoid unleashing it on your production environment, for now...
-{{< /admonition >}}
 
 ## What is Azure Chaos Studio
 
@@ -147,7 +134,7 @@ Since roughly half of the requests are failing, it looks like the load balancer 
 
 My chaos experiment has identified a bug in my infrastructure design - the load balancer should be detecting that one of the backend VMs is offline and should stop routing requests to it.  Clearly half of my requests are still being forwarded to the disconnected VM which is why they are timing out.  
 
-The issue is quite easy to spot in this case: whilst I have defined a health probe in my load balancer, I have forgotten to link it to the [backend pool configuration](https://github.com/tmeadon/azure-chaos-studio-playground/blob/bad-lb-config/iac/lb.bicep#L38-L52)!  Doh :man_facepalming:!
+The issue is quite easy to spot in this case: whilst I have defined a health probe in my load balancer, I have forgotten to link it to the [backend pool configuration](https://github.com/tmeadon/azure-chaos-studio-playground/blob/bad-lb-config/iac/lb.bicep#L38-L52)!  Doh...
 
 I have fixed this bug in the [lb.bicep](https://github.com/tmeadon/azure-chaos-studio-playground/blob/good-lb-config/iac/lb.bicep#L50-L52) module in the branch called `good-lb-config`.  When I ran the experiment again after fixing this bug I saw a couple of failed requests whilst the health probe kicked in, but as soon as it did all of my requests were (correctly) being forwarded to the VM that hadn't been disconnected.  After the experiment finished I observed the affected VM serving requests again.  
 

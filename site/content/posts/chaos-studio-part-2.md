@@ -1,19 +1,9 @@
 ---
 title: "Raising Chaos Part 2: Automating Chaos Experiments with GitHub Actions"
-subtitle: "How to add resiliency testing to your CI/CD process using Azure Chaos Studio, GitHub Actions and k6"
-description: "How to add resiliency testing to your CI/CD process using Azure Chaos Studio, GitHub Actions and k6"
 date: 2022-01-06T14:53:48Z
 draft: false
 tags:
-- chaos
-- azure
-- bicep
-- k6
-toc:
-  auto: false
-images:
-- /images/chaos-part-2-featured.png
-featuredImage: /images/chaos-part-2-featured.png
+- tech
 ---
 
 In [part 1](https://blog.meadon.me/chaos-studio-part-1/) of this mini series I talked about some of the basics of Chaos Engineering and how Azure Chaos Studio can be used to perform experiments in a reliable, repeatable and safe manner.  In this blog post I'll be looking at how to automate the execution and observation of the experiment I created previously to enable us to add regular resiliency testing to our development lifecycle.  

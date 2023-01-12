@@ -2,17 +2,8 @@
 title: "Automating Azure Functions Private HTTPS Client Certificates"
 date: 2021-03-28T18:59:19Z
 draft: false
-categories:
-- How To
 tags:
-- azure
-- powershell
-- azure-functions
-- automation
-- security
-images:
-- /images/azure-functions-pwsh-certs.png
-featuredImage: /images/azure-functions-pwsh-certs-small.png
+- tech
 summary: | 
     This post describes an approach for automating the management of private client HTTPS certificates in your Azure Function Apps.
 ---
