@@ -14,7 +14,6 @@ In this post I will explain how to build a basic Chaos experiment and use it to 
 
 I'll be using Bicep (if you haven't checked Bicep out yet then I would highly recommend you do so - you can [start here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/overview)) to provision a Chaos Studio Experiment as well as the resources which will be the subject of the Experiment.  All of the code can be found in [this GitHub repo](https://github.com/tmeadon/azure-chaos-studio-playground).
 
-
 ## What is Azure Chaos Studio
 
 Azure Chaos Studio is Microsoft's answer to **chaos engineering**, a methodology made popular by Netflix for enhancing the resilience of applications and services, particularly those that are distributed in nature.  According to [principlesofchaos.org](https://principlesofchaos.org/), chaos engineering can be defined as:
