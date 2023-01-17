@@ -4,6 +4,8 @@ date: 2021-11-26T14:53:48Z
 draft: false
 tags:
 - tech
+images:
+- /images/chaos-part-1-featured.png
 ---
 
 Wy wife and I live in a small, fairly calm town in the UK and we love it - the peace and quiet suits us perfectly.  That being said, everyone needs a dose of chaos in their lives from time to time, so this weekend I decided to take a look at the preview release of Azure Chaos Studio to find out how I can use it to breach the peace of my Azure deployments 😇
