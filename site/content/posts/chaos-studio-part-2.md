@@ -4,6 +4,8 @@ date: 2022-01-06T14:53:48Z
 draft: false
 tags:
 - tech
+images:
+- /images/chaos-part-2-featured.png
 ---
 
 In [part 1](https://meadon.net/chaos-studio-part-1/) of this mini series I talked about some of the basics of Chaos Engineering and how Azure Chaos Studio can be used to perform experiments in a reliable, repeatable and safe manner.  In this blog post I'll be looking at how to automate the execution and observation of the experiment I created previously to enable us to add regular resiliency testing to our development lifecycle.  

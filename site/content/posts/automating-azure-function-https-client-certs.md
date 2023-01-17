@@ -6,6 +6,8 @@ tags:
 - tech
 summary: | 
     This post describes an approach for automating the management of private client HTTPS certificates in your Azure Function Apps.
+images:
+- /images/azure-functions-pwsh-certs.png
 ---
 
 One of the most powerful features of Azure Functions are their input and output bindings which enable simple integration with other services.  Whilst the [collection of bindings](https://docs.microsoft.com/en-us/azure/azure-functions/functions-triggers-bindings?tabs=csharp#supported-bindings) currently on offer covers a good number of common integration points, it is likely that we will need to communicate with a service that doesn't have a binding at some point in the future.  When this happens we will need to implement this communication ourselves which, more often than not, will involve making HTTP calls to the service using whatever method is appropriate in our language of choice.  As it's 2021 it really ought to be fair to assume that we'll be communicating with the service using HTTPS, so what happens when that service is offering up a non-public (e.g. self signed or produced by a private certificate authority) certificate for HTTPS?
