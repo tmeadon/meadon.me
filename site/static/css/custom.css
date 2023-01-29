@@ -22,3 +22,8 @@ figure img {
 pre code {
     font-size: 14px;
 }
+
+.profile .avatar {
+    width: 120px;
+    height: 120px
+}
