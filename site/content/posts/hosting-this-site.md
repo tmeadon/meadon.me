@@ -1,7 +1,7 @@
 ---
 author:
 title: "Hosting this static site: Hugo, Azure Storage, Cloudflare & GitHub Actions"
-date: 2020-09-24T08:12:17Z
+date: 2021-09-24T08:12:17Z
 draft: false
 tags:
 - tech
