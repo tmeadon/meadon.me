@@ -1,6 +1,6 @@
 ---
 title: "How To Run Custom App Insights Availability Tests for Private Web Applications"
-date: 2021-06-24T15:54:22Z
+date: 2022-01-24T15:54:22Z
 draft: false
 tags:
 - tech

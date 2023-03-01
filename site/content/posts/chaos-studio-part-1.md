@@ -1,6 +1,6 @@
 ---
 title: "Raising Chaos Part 1: Creating and Running Experiments with Azure Chaos Studio"
-date: 2021-11-26T14:53:48Z
+date: 2022-03-26T14:53:48Z
 draft: false
 tags:
 - tech

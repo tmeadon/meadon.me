@@ -1,6 +1,6 @@
 ---
 title: "Automating Azure Functions Private HTTPS Client Certificates"
-date: 2021-03-28T18:59:19Z
+date: 2022-01-03T18:59:19Z
 draft: false
 tags:
 - tech

@@ -1,6 +1,6 @@
 ---
 title: "Raising Chaos Part 2: Automating Chaos Experiments with GitHub Actions"
-date: 2022-01-06T14:53:48Z
+date: 2022-04-02T14:53:48Z
 draft: false
 tags:
 - tech
