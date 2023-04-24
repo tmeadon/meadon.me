@@ -10,7 +10,7 @@ hasCJKLanguage: true
 permalinks:
   posts: /posts/:title/
 
-paginate: 4
+paginate: 6
 
 googleAnalytics: UA-179786144-1
 # disqusShortname: your-disqus-shortname
