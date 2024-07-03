@@ -1,9 +1,10 @@
-—
+---
 author: Tom Meadon
 title: “Further Evidence That It Is, In Fact, Always DNS”
 date: 2024-07-03T08:12:17Z
 draft: false
-—
+---
+
 I’ve been back in [the engine room](https://architectelevator.com/) a bit more over the last couple of weeks. And it’s been great - or at least it had been, until I starting helping one of my team with a problem they were facing with a solution we were building for a customer.  
 
 This problem came out of nowhere - one day everything was working normally, and the next day it wasn’t. Without us having released any changes. Affecting all environments. Whaaat?
