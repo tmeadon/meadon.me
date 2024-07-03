@@ -1,6 +1,6 @@
 ---
 author: Tom Meadon
-title: “Further Evidence That It Is, In Fact, Always DNS”
+title: Further Evidence That It Is, In Fact, Always DNS
 date: 2024-07-03T08:12:17Z
 draft: false
 ---
