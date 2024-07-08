@@ -119,9 +119,9 @@ hr {
 }
 
 @media (max-width: 720px) {
-	body {
+	/* body {
 		font-size: 14px;
-	}
+	} */
 
 	/* main { */
 	/* padding: 10px; */
