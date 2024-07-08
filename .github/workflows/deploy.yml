@@ -48,10 +48,10 @@ jobs:
 
       - name: Copy to storage
         env:
-          AZURE_STORAGE_URI: ${{ inputs.storageContainerUri }}
-          AZURE_STORAGE_SAS: ${{ secrets.storageSasToken }}
+          AZURE_STORAGE_URI: https://blogmeadonmestg.blob.core.windows.net/$web/
+          AZURE_STORAGE_SAS: ${{ secrets.BLOG_SAS_TOKEN }}
         run: |
-          azcopy sync . "https://blogmeadonmestg.blob.core.windows.net/$web/${{ secrets.BLOG_SAS_TOKEN }}" --delete-destination=true
+          azcopy sync . "${AZURE_STORAGE_URI}${AZURE_STORAGE_SAS}" --delete-destination=true
 
       # - name: Copy to storage
       #   env:
