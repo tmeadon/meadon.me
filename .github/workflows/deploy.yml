@@ -32,5 +32,22 @@ jobs:
           path: dist
 
           
+  deployStaging:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
 
+      - name: Display structure of downloaded files
+        run: ls -R
+
+      # - name: Copy to storage
+      #   env:
+      #     AZURE_STORAGE_URI: ${{ inputs.storageContainerUri }}
+      #     AZURE_STORAGE_SAS: ${{ secrets.storageSasToken }}
+      #   run: |
+      #     azcopy10 sync 
       
