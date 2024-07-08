@@ -67,7 +67,7 @@ Before we can write any tests for our functions we'll need to think about how we
 
 We should be able to write some tests now, so let's set up our tests file by adding a `Describe` block (which will contain all of our tests) and a `Context` block (which will contain the module tests).
 
-```PowerShell
+```powershell
 Describe "Countries Tests" {
     Context "Test countries module" {
 
@@ -77,7 +77,7 @@ Describe "Countries Tests" {
 
 Next, we need to add a `BeforeAll` block to the `Context` block and add to it some setup steps such as loading the module (i.e. our test subject), loading our example data and creating our mocks:
 
-```PowerShell
+```powershell
 Describe "Countries Tests" {
     Context "Test countries module" {
         BeforeAll {
@@ -125,7 +125,7 @@ Input?
 
 Like above, let's create a new `Context` block and add to it a `BeforeAll` block with some setup (including dot sourcing our stubs file, storing some variables that we'll need later in the tests and creating some mocks for our module functions as well as `Push-OutputBinding`):
 
-```PowerShell
+```powershell
 Context "Test Function" {
     BeforeAll {
         # load functions runtime stubs

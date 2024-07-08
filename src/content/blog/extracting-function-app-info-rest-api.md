@@ -27,7 +27,7 @@ Or will we?  Version `4.7.0` of the Azure PowerShell module introduced a shiny n
 
 - Using the App Registration's client ID and client secret properties (available in the Azure Portal), we would have then needed to request an access token from Microsoft by running something like:
 
-    ```PowerShell
+    ```powershell
     # request REST API access token
     $tenantId = <AzureTenantId>
     $appRegId = <AppRegistrationClientId>
@@ -40,7 +40,7 @@ Or will we?  Version `4.7.0` of the Azure PowerShell module introduced a shiny n
 
 - With that token, we could have then ran something like this to construct the header and then make the request:
 
-    ```PowerShell
+    ```powershell
     # prepare HTTP headers
     $headers = @{
         Authorization = ("{0} " -f $token.token_type) + " " + ("{0}" -f $token.access_token)
@@ -56,7 +56,7 @@ Or will we?  Version `4.7.0` of the Azure PowerShell module introduced a shiny n
 
 Using `Invoke-AzRestMethod` we don't have to worry about any of that - as long as we've logged in to Azure PowerShell (using `Connect-AzAccount`) we can simply run:
 
-```PowerShell
+```powershell
 Invoke-AzRestMethod -Path ('{0}?api-version={1}' -f $resourceId, $apiVersion) -Method <SomeMethod>
 ```
 
@@ -66,7 +66,7 @@ For the rest of this post I'll be using the `Invoke-AzRestMethod` option - for o
 
 So what does `Invoke-AzRestMethod` give us?  Well of course it depends on the operation you're performing, but at very least it will return a `Microsoft.Azure.Commands.Profile.Models.PSHttpResponse` object containing the response headers, the status code, the HTTP method, the HTTP version and the response content.  The `Content` property contains the information we're looking to retrieve in JSON form, so to convert it to a form that's easier to work with in PowerShell (i.e. a `PSCustomObject`), we can run:
 
-```PowerShell
+```powershell
 $response = Invoke-AzRestMethod -Path ('{0}?api-version={1}' -f $resourceId, $apiVersion) -Method <SomeMethod>
 
 $response.Content | ConvertFrom-Json
@@ -78,13 +78,13 @@ From there we can explore the response as we would any PowerShell object.
 
 Now we understand the basics of interacting with the Azure REST API, let's see how we can go about listing out the Functions in a given Function App.  The very first thing we need is the resource ID for the Function App, which we can get by running:
 
-```PowerShell
+```powershell
 $fa = Get-AzFunctionApp -Name <NameOfFunctionApp> -ResourceGroupName <NameOfResourceGroup>
 ```
 
 According to the [docs](https://docs.microsoft.com/en-us/rest/api/appservice/webapps/listfunctions) we can list the functions by appending `/functions` to the resource ID in the request URI as well as the API version (I'll be using the latest version at the time of writing: `2020-06-01`).  Running that against my example Function App gives me the following:
 
-```PowerShell
+```powershell
 # make the http request and convert the Content to a PSCustomObject
 $functions = (Invoke-AzRestMethod -Path ($fa.Id + "\functions?api-version=2020-06-01") -Method GET).content | ConvertFrom-Json
 ```
@@ -115,7 +115,7 @@ properties : @{name=HttpTrigger2; function_app_id=; script_root_path_href=https:
 
 Expanding out the `properties` property for the first item in the array shows the existence of a property called `invoke_url_template` whose value is the URL for the Function - exactly what I was looking for!  So, to list the URLs for all of the Functions we can run:
 
-```PowerShell
+```powershell
 $functions.value.properties.invoke_url_template
 ```
 
@@ -130,7 +130,7 @@ https://tomsfunctionapp.azurewebsites.net/api/httptrigger2
 
 To get the keys for the individual Functions, we can use the ['List Functions Keys'](https://docs.microsoft.com/en-us/rest/api/appservice/webapps/listfunctionkeys) operation for each Function by running:
 
-```PowerShell
+```powershell
 # make the rest request
 $keys = (Invoke-AzRestMethod -Path ($fa.Id + "\functions\<FunctionName>\listkeys?api-version=2020-06-01") -Method POST).Content | ConvertFrom-Json
 
@@ -140,7 +140,7 @@ $keys.default
 
 So, in order to get the keys for all of the Functions in a Function App, we can iterate through the `$functions` variable we created in the previous section and output a PSCustomObject for each Function:
 
-```PowerShell
+```powershell
 foreach ($functionName in $functions.value.properties.name)
 {
     $keys = (Invoke-AzRestMethod -Path ($fa.Id + "\functions\$functionName\listkeys?api-version=2020-06-01") -Method POST).content | ConvertFrom-Json
@@ -152,7 +152,7 @@ foreach ($functionName in $functions.value.properties.name)
 
 Using what we discovered in the previous two sections we can put together a PowerShell function that could be called from a task in the deployment pipeline.  The example function below will pull out the complete URLs for all of the Functions in a given Function App and will create (or update) a secret in a given Key Vault account for each Function containing its URL.  The name of the secrets will match the Functions' names, so make sure there aren't any existing secrets in your Key Vault account with the same names before running this!  
 
-```PowerShell {linenos=table}
+```powershell {linenos=table}
 function Save-FunctionAppDetails
 {
     [CmdletBinding()]

@@ -26,7 +26,7 @@ Whilst option 2 is probably a bit trickier to achieve, it has the following bene
 
 I couldn't find a PowerShell native way to connect to a given web server and read it's HTTPS certificate, so I turned to the `System.Net.Security` .NET namespace - specifically the `TcpClient` and `SslStream` classes (the ability to do this is one of the many great things about PowerShell :smiley:):
 
-```PowerShell
+```powershell
 $hostname = "enter_hostname"
 
 # create a new TcpClient instance and connect it to $hostname over port 443
@@ -42,7 +42,7 @@ $cert = $stream.RemoteCertificate
 
 This code gives us the certificate at the end of the chain which isn't quite enough for the Functions runtime to be able to trust our service, we'll also need to get the public key of every other certificate in the chain (i.e. any intermediate and root CAs).  The `System.Security.Cryptography` .NET namespace can help here:
 
-```PowerShell
+```powershell
 $chain = [System.Security.Cryptography.X509Certificates.X509Chain]::new()
 $chain.Build($cert)
 ```
@@ -62,7 +62,7 @@ According to the documentation we'll need to call the API once for each certific
 
 We'll need to provide a name for each certificate we want to upload so we'll define a naming prefix and then we'll create each certificate's name by appending its position in the chain (in other words `$i` in the code below).
 
-```PowerShell
+```powershell
 $functionAppResourceId = "enter_function_apps_resource_id"
 $certNamePrefix = "enter_cert_name_prefix"
 
@@ -95,7 +95,7 @@ At this stage our certificates are available to the Function App, but that doesn
 
 We'll need to extract a list of thumbprints from the `$chain` variable we created earlier, configure the app settings appropriately and then update the Function App.
 
-```PowerShell
+```powershell
 $functionAppName = "enter_function_app_name"
 $resourceGroupName = "enter_function_apps_resource_group"
 $functionApp = Get-AzWebApp -Name $functionAppName -ResourceGroupName $ResourceGroupName -ErrorAction Stop

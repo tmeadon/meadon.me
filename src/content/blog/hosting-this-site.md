@@ -20,7 +20,7 @@ Something else that I decided early on was that I wanted to host the site using 
 
 After deciding how I was going to build and host the site, the next logical step was to get something up and running locally.  According to [Hugo's Quick Start guide](https://gohugo.io/getting-started/quick-start/) the first thing I needed to do was install Hugo itself.  Personally I try to keep my machine as tidy as possible so I decided to develop this project using VS Code's containers extension which allows you to use a container (rather than your local disk) as fully-featured development environment (see [here](https://code.visualstudio.com/docs/remote/containers) for more information about setting this up).  To get started I created a new project, initialised a git repository and fired up VS Code:
 
-```PowerShell
+```powershell
 mkdir blog
 cd blog
 git init
@@ -58,7 +58,7 @@ To add some content (or in other words a blog post), I ran `hugo new posts/hosti
 
 After tinkering with the site's config and styling and adding some content, images and favicons, it was time to make the site available on the world wide web. The first job was to create the Azure storage account and enable it for static web sites - for this I turned to trusty Azure PowerShell:
 
-```PowerShell
+```powershell
 # create a resource group
 $rg = New-AzResourceGroup -ResourceGroupName <ResourceGroupName> -Location 'uksouth'
 
@@ -71,7 +71,7 @@ Enable-AzStorageStaticWebsite -Context $sa.Context -IndexDocument 'index.html' -
 
 The next task was to build the site (by simply running `hugo`) and push the build's output (which is created by default under `public`) into the storage account's new `$web` container.  Since PowerShell is always my go to, I attempted to use the `Set-AzStorageBlobContent` to upload the site's root files and directories, however it didn't set the blobs' `ContentType` property correctly, resulting in my browser not rendering any of the CSS - what a mess.  Rather than spending time trying to figure out how to work around this problem, I gave [azcopy](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10) a go by running:
 
-```PowerShell
+```powershell
 azcopy sync ./blog/public/ "<container_sas_uri>"
 ```
 
