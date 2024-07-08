@@ -8,7 +8,9 @@ on:
 jobs:
   staging:
     runs-on: ubuntu-latest
-    environment: stage
+    environment:
+      name: Staging
+      url: https://blogmeadonmestg.z33.web.core.windows.net
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4

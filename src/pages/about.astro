@@ -1,79 +1,90 @@
-//TODO
+---
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
 
-<!-- ---
-import Layout from "../layouts/BlogPost.astro";
-
-const props = {
-	title: "About Me",
-	description: "Lorem ipsum dolor sit amet",
-	pubDate: new Date("August 08 2021"),
-	summary: "about",
-};
+const text = `
+I'm Tom. I am a proud husband, a new father, and a recently appointed CTO at a wonderful company called Sundown Solutions. I love music, good food and drink, and all things tech. Alongside those interests I'm also discovering a new-found enjoyment in writing - it helps that I'm married to a Cambridge graduate who patiently proof reads whatever drivel I put in front of her!
+\r
+I originally started this blog as a space for techie articles, but I've decided to forget this constraint. I'm a firm believer that writing is thinking, and my intention now is to use this site to help me process the vast number of lessons I'm bound to learn following the recent changes in my home and work life. I don't know what topics I'll write about - or if I'll get round to any writing at all…and if that's the case, it's the thought that counts, right?
+`;
 ---
 
-<Layout data={props}>
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-		tempor incididunt ut labore et dolore magna aliqua. Vitae ultricies leo
-		integer malesuada nunc vel risus commodo viverra. Adipiscing enim eu
-		turpis egestas pretium. Euismod elementum nisi quis eleifend quam
-		adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus
-		sit amet volutpat. Netus et malesuada fames ac turpis egestas. Eget
-		magna fermentum iaculis eu non diam phasellus vestibulum lorem. Varius
-		sit amet mattis vulputate enim. Habitasse platea dictumst quisque
-		sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque
-		sagittis purus sit amet.
-	</p>
+<html lang="en">
+	<head>
+		<BaseHead title="About" description="About" />
+		<style>
+			main {
+				width: 100%;
+				margin: 0;
+			}
 
-	<p>
-		Morbi tristique senectus et netus. Id semper risus in hendrerit gravida
-		rutrum quisque non tellus. Habitasse platea dictumst quisque sagittis
-		purus sit amet. Tellus molestie nunc non blandit massa. Cursus vitae
-		congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna
-		porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt
-		lobortis. In cursus turpis massa tincidunt dui ut ornare lectus. Integer
-		feugiat scelerisque varius morbi enim nunc. Bibendum neque egestas
-		congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis
-		bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus
-		urna et pharetra pharetra massa massa ultricies mi.
-	</p>
+			.prose {
+				max-width: 900px;
+				margin: 60px auto 0;
+				padding: 0 64px;
+				/* box-sizing: border-box; */
+			}
 
-	<p>
-		Mollis nunc sed id semper risus in. Convallis a cras semper auctor
-		neque. Diam sit amet nisl suscipit. Lacus viverra vitae congue eu
-		consequat ac felis donec. Egestas integer eget aliquet nibh praesent
-		tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In
-		vitae turpis massa sed elementum. Tristique et egestas quis ipsum
-		suspendisse ultrices. Eget lorem dolor sed viverra ipsum. Vel turpis
-		nunc eget lorem dolor sed viverra. Posuere ac ut consequat semper
-		viverra nam. Laoreet suspendisse interdum consectetur libero id
-		faucibus. Diam phasellus vestibulum lorem sed risus ultricies tristique.
-		Rhoncus dolor purus non enim praesent elementum facilisis. Ultrices
-		tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium
-		quam vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus
-		faucibus ornare. Fringilla urna porttitor rhoncus dolor purus non. Amet
-		dictum sit amet justo donec enim.
-	</p>
+			.prose .title h1 {
+				text-align: center;
+				font-size: 32px;
+				font-weight: 400;
+				line-height: 48px;
+			}
 
-	<p>
-		Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere
-		ac ut consequat semper viverra. Tellus mauris a diam maecenas sed enim
-		ut sem viverra. Venenatis urna cursus eget nunc scelerisque viverra
-		mauris in. Arcu ac tortor dignissim convallis aenean et tortor at.
-		Curabitur gravida arcu ac tortor dignissim convallis aenean et tortor.
-		Egestas tellus rutrum tellus pellentesque eu. Fusce ut placerat orci
-		nulla pellentesque dignissim enim sit amet. Ut enim blandit volutpat
-		maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt
-		arcu. Id cursus metus aliquam eleifend mi.
-	</p>
+			.prose .tip {
+				text-align: center;
+				color: #8c8c8c;
+				margin-top: 18px;
+				font-size: 14px;
+			}
 
-	<p>
-		Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi
-		tempus imperdiet. Id porta nibh venenatis cras sed felis eget velit.
-		Ipsum a arcu cursus vitae. Facilisis magna etiam tempor orci eu lobortis
-		elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci
-		ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper
-		feugiat nibh sed pulvinar proin gravida. Egestas integer eget aliquet
-		nibh praesent tristique magna.
-	</p>
-</Layout> -->
+			.prose .tip .split {
+				margin: 0 4px;
+			}
+
+			.prose .content {
+				margin-top: 36px;
+			}
+
+			.prose .tags {
+				margin-top: 24px;
+			}
+
+			.prose .tags a {
+				background: #f2f2f2;
+				padding: 4px 7px;
+				color: #757575;
+				font-size: 14px;
+				margin-right: 3px;
+			}
+
+			.prose .tags a:hover {
+				color: #0366d6;
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header />
+		<main>
+			<article>
+				<div class="prose">
+					<div class="title">
+						<h1>About</h1>
+					</div>
+					<div class="content">
+						{
+							text
+								.split("\r")
+								.map((paragraph) => <p>{paragraph}</p>)
+						}
+					</div>
+				</div>
+			</article>
+		</main>
+
+		<Footer />
+	</body>
+</html>
