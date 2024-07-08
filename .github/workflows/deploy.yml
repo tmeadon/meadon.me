@@ -33,7 +33,7 @@ jobs:
 
           
   deployStaging:
-    displayName: 'Deploy to staging'
+    name: 'Deploy to staging'
     runs-on: ubuntu-latest
     needs: build
     environment: stage
