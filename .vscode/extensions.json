@@ -1,9 +1,4 @@
 {
-    "recommendations": [
-        "coenraads.bracket-pair-colorizer-2",
-        "streetsidesoftware.code-spell-checker",
-        "github.github-vscode-theme",
-        "oderwat.indent-rainbow",
-        "yzhang.markdown-all-in-one"
-    ]
+  "recommendations": ["astro-build.astro-vscode", "unifiedjs.vscode-mdx"],
+  "unwantedRecommendations": []
 }

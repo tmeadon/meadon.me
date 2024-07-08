@@ -1,0 +1,160 @@
+---
+import BaseHead from "../../components/BaseHead.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
+import { getCollection } from "astro:content";
+import FormattedDate from "../../components/FormattedDate.astro";
+import { fromMarkdown } from "mdast-util-from-markdown";
+import { toString } from "mdast-util-to-string";
+
+const posts = (await getCollection("blog")).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+function getSummary(body: string): string {
+	return toString(fromMarkdown(body.split("\n")[0]));
+}
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			main {
+				width: 960px;
+			}
+
+			.profile {
+				margin: 60px auto 0;
+				text-align: center;
+			}
+
+			.profile .avatar {
+				display: inline-block;
+				width: 125px;
+				height: 125px;
+				border-radius: 50%;
+			}
+
+			.profile h1 {
+				font-weight: 400;
+				letter-spacing: 0;
+				font-size: 20px;
+				color: #404040;
+				margin-bottom: 0;
+				margin-top: 0;
+			}
+
+			.profile h2 {
+				font-size: 20px;
+				font-weight: 300;
+				color: #757575;
+				margin-top: 0;
+			}
+
+			#list-page {
+				max-width: 900px;
+				margin: 40px auto;
+				padding: 0 24px;
+			}
+
+			#list-page .item {
+				margin: 12px 0;
+			}
+
+			#list-page .title {
+				display: inline-block;
+				color: #404040;
+				font-size: 20px;
+				font-weight: 400;
+				margin: 0;
+				width: 80%;
+			}
+
+			#list-page .title a {
+				color: #404040;
+				display: block;
+			}
+
+			#list-page .title a:hover {
+				color: #0366d6;
+			}
+
+			#list-page .date {
+				width: 20%;
+				float: right;
+				text-align: right;
+				position: relative;
+				top: 1px;
+				color: #bbb;
+			}
+
+			#list-page .summary {
+				color: #757575;
+				margin-top: 12px;
+				word-break: normal;
+				overflow-wrap: anywhere;
+				margin-bottom: 36px;
+			}
+
+			#list-page .cover {
+				width: 100px;
+				height: 100px;
+				background: #fff;
+			}
+
+			#list-page .cover img {
+				width: 100%;
+				text-align: center;
+			}
+
+			#list-page .pagination {
+				margin: 48px 0;
+				width: 100%;
+				height: 32px;
+				margin-top: 48px;
+			}
+
+			#list-page .pagination .pre {
+				float: left;
+			}
+
+			#list-page .pagination .next {
+				float: right;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="profile">
+				<img class="avatar" src="/profile.png" alt="Avatar" />
+				<h1>Tom Meadon</h1>
+				<h2>Dad and CTO</h2>
+			</div>
+
+			<div id="list-page">
+				{
+					posts.map((post) => (
+						<section class="item">
+							<div>
+								<h1 class="title">
+									<a href={`/blog/${post.slug}/`}>
+										{post.data.title}
+									</a>
+								</h1>
+								<div class="date">
+									<FormattedDate date={post.data.pubDate} />
+								</div>
+							</div>
+							<div class="summary">{getSummary(post.body)}</div>
+						</section>
+					))
+				}
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

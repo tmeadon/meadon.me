@@ -1,0 +1,105 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import getReadingTime from "reading-time";
+import { toString } from "mdast-util-to-string";
+import { fromMarkdown } from "mdast-util-from-markdown";
+
+type Props = CollectionEntry<"blog">;
+
+const { title, description, pubDate, updatedDate } = Astro.props["data"];
+
+const textOnPage = toString(fromMarkdown(Astro.props.body));
+const { text: readingTime, words } = getReadingTime(textOnPage);
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description ?? ""} />
+		<style>
+			main {
+				width: 100%;
+				margin: 0;
+			}
+			.prose {
+				max-width: 900px;
+				margin: 60px auto 0;
+				padding: 0 64px;
+			}
+
+			.prose .title h1 {
+				text-align: center;
+				font-size: 32px;
+				font-weight: 400;
+				line-height: 48px;
+			}
+
+			.prose .tip {
+				text-align: center;
+				color: #8c8c8c;
+				margin-top: 18px;
+				font-size: 14px;
+			}
+
+			.prose .tip .split {
+				margin: 0 4px;
+			}
+
+			.prose .content {
+				margin-top: 36px;
+			}
+
+			.prose .tags {
+				margin-top: 24px;
+			}
+
+			.prose .tags a {
+				background: #f2f2f2;
+				padding: 4px 7px;
+				color: #757575;
+				font-size: 14px;
+				margin-right: 3px;
+			}
+
+			.prose .tags a:hover {
+				color: #0366d6;
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header />
+		<main>
+			<article>
+				<div class="prose">
+					<div class="title">
+						<h1>{title}</h1>
+					</div>
+					<div class="tip">
+						<FormattedDate date={pubDate} />
+						<span class="split"> · </span>
+						<span> {words} words </span>
+						<span class="split"> · </span>
+						<span> {readingTime}</span>
+						<span class="split"> · </span>
+						{
+							updatedDate && (
+								<div class="last-updated-on">
+									Last updated on{" "}
+									<FormattedDate date={updatedDate} />
+								</div>
+							)
+						}
+					</div>
+					<div class="content">
+						<slot />
+					</div>
+				</div>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>

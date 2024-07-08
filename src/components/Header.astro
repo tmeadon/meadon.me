@@ -1,0 +1,44 @@
+---
+import HeaderLink from "./HeaderLink.astro";
+---
+
+<header>
+	<nav>
+		<div class="internal-links">
+			<HeaderLink href="/">Home</HeaderLink>
+			<HeaderLink href="/blog">Blog</HeaderLink>
+			<HeaderLink href="/about">About</HeaderLink>
+			<a class="button" href="/index.xml">Subscribe</a>
+		</div>
+	</nav>
+</header>
+<style>
+	nav .internal-links {
+		padding: 20px 20px 0;
+		background: #fff;
+		background: rgba(255, 255, 255, 0.9);
+		margin: 0 auto;
+		text-align: right;
+		z-index: 100;
+	}
+
+	nav .internal-links a {
+		top: 8px;
+		right: 6px;
+		padding: 8px 12px;
+		color: #5badf0;
+		font-size: 13px;
+		line-height: 1.35;
+		border-radius: 3px;
+	}
+
+	nav .internal-links a:hover {
+		color: #0366d6;
+	}
+
+	nav .internal-links a.button {
+		background: #5badf0;
+		color: #fff;
+		margin-left: 12px;
+	}
+</style>
