@@ -8,9 +8,9 @@ import FormattedDate from "../../components/FormattedDate.astro";
 import { fromMarkdown } from "mdast-util-from-markdown";
 import { toString } from "mdast-util-to-string";
 
-const posts = (await getCollection("blog")).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const posts = (await getCollection("blog"))
+	.filter((b) => b.data.draft !== true)
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 function getSummary(body: string): string {
 	return toString(fromMarkdown(body.split("\n")[0]));
