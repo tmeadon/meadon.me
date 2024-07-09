@@ -17,6 +17,7 @@ jobs:
       storageSasToken: ${{ secrets.BLOG_SAS_TOKEN }}
 
   prod:
+    name: Production
     needs: [staging]
     if: github.ref == 'refs/heads/main'
     uses: tmeadon/meadon.me/.github/workflows/build_template.yml@main
