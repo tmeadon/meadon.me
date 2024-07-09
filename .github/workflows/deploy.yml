@@ -15,3 +15,14 @@ jobs:
       environment: stage
     secrets:
       storageSasToken: ${{ secrets.BLOG_SAS_TOKEN }}
+
+  prod:
+    needs: [staging]
+    if: github.ref == 'refs/heads/main'
+    uses: tmeadon/meadon.me/.github/workflows/build_template.yml@main
+    with:
+      siteBaseUrl: https://meadon.net/
+      storageContainerUri: https://blogmeadonme.blob.core.windows.net/$web/
+      environment: prod
+    secrets:
+      storageSasToken: ${{ secrets.BLOG_SAS_TOKEN }}
