@@ -8,7 +8,7 @@ on:
 jobs:
   staging:
     name: Staging
-    uses: tmeadon/meadon.me/.github/workflows/build_template.yml@next
+    uses: tmeadon/meadon.me/.github/workflows/build_template.yml@main
     with:
       siteBaseUrl: https://blogmeadonmestg.z33.web.core.windows.net/
       storageContainerUri: https://blogmeadonmestg.blob.core.windows.net/$web/
