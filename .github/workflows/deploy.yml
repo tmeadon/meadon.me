@@ -8,30 +8,10 @@ on:
 jobs:
   staging:
     name: Staging
-    runs-on: ubuntu-latest
-    environment:
-      name: stage
-      url: https://blogmeadonmestg.z33.web.core.windows.net
-    steps:
-      - name: Checkout your repository using git
-        uses: actions/checkout@v4
-      
-      - name: actions/setup-node@v4
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build -- --site https://blogmeadonmestg.z33.web.core.windows.net          
-
-      - name: Copy to storage
-        env:
-          AZURE_STORAGE_URI: https://blogmeadonmestg.blob.core.windows.net/$web/
-          AZURE_STORAGE_SAS: ${{ secrets.BLOG_SAS_TOKEN }}
-        run: |
-          azcopy sync ./dist "${AZURE_STORAGE_URI}${AZURE_STORAGE_SAS}" --delete-destination=true
-      
+    uses: tmeadon/meadon.me/.github/workflows/build_template.yml@next
+    with:
+      siteBaseUrl: https://blogmeadonmestg.z33.web.core.windows.net/
+      storageContainerUri: https://blogmeadonmestg.blob.core.windows.net/$web/
+      environment: stage
+    secrets:
+      storageSasToken: ${{ secrets.BLOG_SAS_TOKEN }}
