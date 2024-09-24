@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   staging:
@@ -19,7 +22,7 @@ jobs:
   prod:
     name: Production
     needs: [staging]
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     uses: tmeadon/meadon.me/.github/workflows/build_template.yml@main
     with:
       siteBaseUrl: https://meadon.net/
