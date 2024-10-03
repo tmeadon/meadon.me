@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "meadon.me",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -12,14 +12,22 @@
   "dependencies": {
     "@astrojs/check": "^0.7.0",
     "@astrojs/mdx": "^3.1.2",
+    "@astrojs/node": "^8.3.4",
     "@astrojs/rss": "^4.0.7",
     "@astrojs/sitemap": "^3.1.6",
     "@kotosha/astro-gist": "^1.0.0",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.50.0",
+    "@opentelemetry/exporter-prometheus": "^0.53.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.53.0",
+    "@opentelemetry/sdk-node": "^0.53.0",
     "astro": "^4.11.5",
+    "express": "^4.21.0",
     "mdast-util-to-string": "^4.0.0",
     "reading-time": "^1.5.0",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-slug": "^6.0.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
   }
 }

@@ -7,14 +7,29 @@ import { getCollection } from "astro:content";
 import FormattedDate from "../../components/FormattedDate.astro";
 import { fromMarkdown } from "mdast-util-from-markdown";
 import { toString } from "mdast-util-to-string";
+import opentelemetry from '@opentelemetry/api';
 
-const posts = (await getCollection("blog"))
-	.filter((b) => b.data.draft !== true)
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const tracer = opentelemetry.trace.getTracer(
+  'index',
+);
+
+const posts = await tracer.startActiveSpan('index', async (span) => {
+  span.setAttribute('key', 'value');
+
+  let p = (await getCollection("blog"))
+    .filter((b) => b.data.draft !== true)
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+  span.addEvent('fetching posts');
+  span.end();
+  return p;
+});
 
 function getSummary(body: string): string {
 	return toString(fromMarkdown(body.split("\n")[0]));
 }
+
+console.log("here")
 ---
 
 <!doctype html>
