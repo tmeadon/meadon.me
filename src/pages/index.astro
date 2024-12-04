@@ -7,6 +7,8 @@ import { getCollection } from "astro:content";
 import FormattedDate from "../components/FormattedDate.astro";
 import { fromMarkdown } from "mdast-util-from-markdown";
 import { toString } from "mdast-util-to-string";
+import { Image} from 'astro:assets';
+import Profile from "../assets/IMG_8516.jpg"
 
 const posts = (await getCollection("blog"))
 	.filter((b) => b.data.draft !== true)
@@ -27,14 +29,14 @@ function getSummary(body: string): string {
 			}
 
 			.profile {
-				margin: 60px auto 0;
+				margin: 20px auto 0;
 				text-align: center;
 			}
 
 			.profile .avatar {
 				display: inline-block;
-				width: 125px;
-				height: 125px;
+				width: 200px;
+				height: 200px;
 				border-radius: 50%;
 			}
 
@@ -130,7 +132,7 @@ function getSummary(body: string): string {
 		<Header />
 		<main>
 			<div class="profile">
-				<img class="avatar" src="/profile.png" alt="Avatar" />
+        <Image src={Profile} alt="Avatar" class="avatar" />
 				<h1>Tom Meadon</h1>
 				<h2>Dad and CTO</h2>
 			</div>
