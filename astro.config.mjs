@@ -6,19 +6,18 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://meadon.net',
-	integrations: [mdx(), sitemap()],
-	output: 'static',
-	redirects: {
-		'/': '/blog',
-		'/posts/[...slug]': '/blog/[...slug]'
-	},
-	markdown: {
-		rehypePlugins: [
-			rehypeSlug,
-			[rehypeAutolinkHeadings, {
-				behavior: 'append', content: [{ type: 'text', value: '🔗' }]
-			}]
-		]
-	}
+  site: 'https://meadon.net',
+  integrations: [mdx(), sitemap()],
+  output: 'static',
+  redirects: {
+    '/posts/[...slug]': '/blog/[...slug]'
+  },
+  markdown: {
+    rehypePlugins: [
+      rehypeSlug,
+      [rehypeAutolinkHeadings, {
+        behavior: 'append', content: [{ type: 'text', value: '🔗' }]
+      }]
+    ]
+  }
 });
