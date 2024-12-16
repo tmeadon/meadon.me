@@ -46,11 +46,11 @@ resource "subnet" "mySubnet" {
 }
 ```
 
-In the first example, you're flying blind. In the second, you're flying with the terraform type system as a copilot (no, not that 🤖 kind of copilot). If you think this is so obvious that it doesn't need saying, trust me - it does 😩.
+In the first example, you're flying blind. In the second, you're flying with the terraform type system as a copilot (no, not that 🤖 kind of copilot). If you think this is so obvious that it doesn't need saying, trust me - it does.
 
 #### 2. Consider the audience
 
-When you're developing a terraform module, consider who the intended audience is. Sometimes the audience is platform or infrastructure engineers, and these people often value seeing and controlling some of the finer configuration details. Hiding the details can make them uncomfortable.
+When you're developing a terraform module, consider who the intended audience is. Sometimes the audience is platform or infrastructure engineers, and these people often value seeing and controlling some of the finer configuration details. Hiding these details can make them uncomfortable.
 
 Software developers, on the other hand, typically value being able to get their infrastructure up and running as quickly and with as few decisions as possible. You'll get far greater engagement if your module minimises the time they spend distracted from their day job. For these folk, limit your mandatory parameters as much as possible and provide [sensible defaults](https://www.thoughtworks.com/en-gb/insights/topic/sensible-defaults) for everything else.
 
