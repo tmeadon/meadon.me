@@ -109,4 +109,6 @@ Here's a more visual representation:
 
 > Note - whilst proofreading this post I discovered that Hashicorp have launched a new beta feature called "stacks" in their Terraform cloud product - this is unrelated to the "stacks" I refer to in this section, although they are conceptually very similar.
 
+Adopting this structure can help maintain a clean, scalable, and developer-friendly IaC codebase, making it easier to manage infrastructure complexity and reuse code across different projects.
+
 That's all I have for now. Just remember - Infrastructure as Code can, and **should be**, developer friendly!
