@@ -101,6 +101,16 @@ function getSummary(body: string): string {
 				margin-bottom: 36px;
 			}
 
+			#list-page .series {
+				margin-top: 8px;
+				font-size: 13px;
+				color: #757575;
+			}
+
+			#list-page .series a {
+				color: #0366d6;
+			}
+
 			#list-page .cover {
 				width: 100px;
 				height: 100px;
@@ -152,6 +162,14 @@ function getSummary(body: string): string {
 								</div>
 							</div>
 							<div class="summary">{getSummary(post.body)}</div>
+							{post.data.seriesSlug && (
+								<div class="series">
+									Series: <a href={`/blog/${post.data.seriesSlug}/`}>
+										{post.data.seriesTitle ?? post.data.seriesSlug}
+									</a>
+									{post.data.seriesPart && <span> · Part {post.data.seriesPart}</span>}
+								</div>
+							)}
 						</section>
 					))
 				}

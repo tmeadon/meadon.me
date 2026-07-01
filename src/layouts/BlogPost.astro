@@ -10,7 +10,19 @@ import { fromMarkdown } from "mdast-util-from-markdown";
 
 type Props = CollectionEntry<"blog">;
 
-const { title, description, pubDate, updatedDate } = Astro.props["data"];
+const {
+	title,
+	description,
+	pubDate,
+	updatedDate,
+	seriesSlug,
+	seriesTitle,
+	seriesPart,
+	seriesDisclaimer,
+} = Astro.props["data"];
+
+const showSeriesInfo = Boolean(seriesSlug);
+const showDisclaimer = showSeriesInfo && seriesDisclaimer !== false;
 
 const textOnPage = toString(fromMarkdown(Astro.props.body));
 const { text: readingTime, words } = getReadingTime(textOnPage);
@@ -52,6 +64,27 @@ const { text: readingTime, words } = getReadingTime(textOnPage);
 				margin-top: 36px;
 			}
 
+			.prose .series {
+				text-align: center;
+				margin-top: 18px;
+				font-size: 14px;
+				color: #757575;
+			}
+
+			.prose .series a {
+				color: #0366d6;
+			}
+
+			.prose .disclaimer {
+				margin: 28px auto 0;
+				padding: 16px 18px;
+				border-left: 4px solid #d0d7de;
+				background: #f6f8fa;
+				color: #555;
+				font-size: 14px;
+				line-height: 1.6;
+			}
+
 			.prose .tags {
 				margin-top: 24px;
 			}
@@ -87,11 +120,19 @@ const { text: readingTime, words } = getReadingTime(textOnPage);
 		<main>
 			<article>
 				<div class="prose">
-					<div class="title">
-						<h1>{title}</h1>
+				<div class="title">
+					<h1>{title}</h1>
+				</div>
+				{showSeriesInfo && (
+					<div class="series">
+						<a href={`/blog/${seriesSlug}/`}>
+							{seriesTitle ?? seriesSlug}
+						</a>
+						{seriesPart && <span> · Part {seriesPart}</span>}
 					</div>
-					<div class="tip">
-						<FormattedDate date={pubDate} />
+				)}
+				<div class="tip">
+					<FormattedDate date={pubDate} />
 						<span class="split"> · </span>
 						<span> {words} words </span>
 						<span class="split"> · </span>
@@ -106,10 +147,18 @@ const { text: readingTime, words } = getReadingTime(textOnPage);
 							)
 						}
 					</div>
-					<div class="content">
-						<slot />
-					</div>
+				<div class="content">
+					{showDisclaimer && (
+						<div class="disclaimer">
+							This article was drafted with help from ChatGPT as part of a
+							transparent writing process. I reviewed, edited, and own the
+							final piece. If I publish a manually written article in this
+							series, I can switch this notice off for that post.
+						</div>
+					)}
+					<slot />
 				</div>
+			</div>
 			</article>
 		</main>
 		<Footer />

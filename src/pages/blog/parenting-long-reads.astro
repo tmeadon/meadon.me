@@ -1,0 +1,156 @@
+---
+import BaseHead from "../../components/BaseHead.astro";
+import Footer from "../../components/Footer.astro";
+import Header from "../../components/Header.astro";
+import { getCollection } from "astro:content";
+import FormattedDate from "../../components/FormattedDate.astro";
+
+const SERIES_SLUG = "parenting-long-reads";
+const SERIES_TITLE = "Parenting Long Reads";
+
+const posts = (await getCollection("blog"))
+	.filter((post) => !post.data.draft && post.data.seriesSlug === SERIES_SLUG)
+	.sort((a, b) => {
+		const partA = a.data.seriesPart ?? 0;
+		const partB = b.data.seriesPart ?? 0;
+
+		if (partA !== partB) return partA - partB;
+		return a.data.pubDate.valueOf() - b.data.pubDate.valueOf();
+	});
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title={`${SERIES_TITLE} | Tom Meadon`}
+			description={`Introduction to the ${SERIES_TITLE} series`}
+		/>
+		<style>
+			main {
+				width: 100%;
+				margin: 0;
+			}
+
+			.page {
+				max-width: 900px;
+				margin: 60px auto 0;
+				padding: 0 64px 48px;
+			}
+
+			h1 {
+				text-align: center;
+				font-size: 34px;
+				font-weight: 400;
+				margin-bottom: 18px;
+			}
+
+			.intro,
+			.archive {
+				margin-top: 28px;
+			}
+
+			.intro {
+				font-size: 18px;
+				line-height: 1.8;
+				color: #404040;
+			}
+
+			.placeholder {
+				padding: 18px 20px;
+				border: 1px dashed #d0d7de;
+				background: #fafafa;
+				color: #666;
+				line-height: 1.7;
+			}
+
+			.archive h2 {
+				font-size: 22px;
+				font-weight: 400;
+				margin-bottom: 16px;
+			}
+
+			.post {
+				padding: 16px 0;
+				border-top: 1px solid #eee;
+			}
+
+			.post:first-child {
+				border-top: 0;
+			}
+
+			.post a {
+				font-size: 20px;
+				color: #404040;
+			}
+
+			.post a:hover {
+				color: #0366d6;
+			}
+
+			.meta {
+				margin-top: 6px;
+				font-size: 14px;
+				color: #757575;
+			}
+
+			.empty {
+				color: #757575;
+				font-style: italic;
+			}
+
+			@media (max-width: 700px) {
+				.page {
+					padding: 0 10px 40px;
+					margin-top: 24px;
+				}
+
+				h1 {
+					font-size: 28px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="page">
+				<h1>{SERIES_TITLE}</h1>
+				<div class="intro">
+					<div class="placeholder">
+						<p><strong>Series intro placeholder.</strong></p>
+						<p>
+							Use this page to explain why the series exists, how you are using
+							ChatGPT in the drafting process, and what readers should expect
+							from the posts that follow.
+						</p>
+						<p>
+							Replace this text with your own introduction when you are ready.
+						</p>
+					</div>
+				</div>
+
+				<div class="archive">
+					<h2>Posts in this series</h2>
+					{posts.length > 0 ? (
+						posts.map((post) => (
+							<article class="post">
+								<a href={`/blog/${post.slug}/`}>{post.data.title}</a>
+								<div class="meta">
+									<FormattedDate date={post.data.pubDate} />
+									{post.data.seriesPart && <span> · Part {post.data.seriesPart}</span>}
+								</div>
+							</article>
+						))
+					) : (
+						<p class="empty">
+							No posts have been added yet. Once you publish the first article,
+							it will appear here automatically.
+						</p>
+					)}
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
