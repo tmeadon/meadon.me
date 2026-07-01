@@ -2,7 +2,7 @@
 author: Tom Meadon
 title: "Serve and return in real life"
 description: "How small back-and-forth moments help young children learn language, trust, emotions, and attention."
-pubDate: 2026-07-01T08:00:00Z
+pubDate: 2026-07-01T10:00:00Z
 draft: false
 seriesSlug: parenting-long-reads
 seriesTitle: Parenting Long Reads
