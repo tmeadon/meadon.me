@@ -137,15 +137,6 @@ const { text: readingTime, words } = getReadingTime(textOnPage);
 						<span> {words} words </span>
 						<span class="split"> · </span>
 						<span> {readingTime}</span>
-						<span class="split"> · </span>
-						{
-							updatedDate && (
-								<div class="last-updated-on">
-									Last updated on{" "}
-									<FormattedDate date={updatedDate} />
-								</div>
-							)
-						}
 					</div>
 				<div class="content">
 					{showDisclaimer && (
