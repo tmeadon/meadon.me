@@ -101,9 +101,15 @@ function getSummary(body: string): string {
 				margin-bottom: 36px;
 			}
 
+			#list-page .summary.summary--series {
+				margin-bottom: 4px;
+			}
+
 			#list-page .series {
-				margin-top: 8px;
+				margin-top: 0;
+				margin-bottom: 30px;
 				font-size: 13px;
+				line-height: 1.2;
 				color: #757575;
 			}
 
@@ -161,7 +167,11 @@ function getSummary(body: string): string {
 									<FormattedDate date={post.data.pubDate} />
 								</div>
 							</div>
-							<div class="summary">{getSummary(post.body)}</div>
+							<div
+								class={post.data.seriesSlug ? "summary summary--series" : "summary"}
+							>
+								{getSummary(post.body)}
+							</div>
 							{post.data.seriesSlug && (
 								<div class="series">
 									Series: <a href={`/blog/${post.data.seriesSlug}/`}>
