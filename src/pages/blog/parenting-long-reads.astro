@@ -2,7 +2,7 @@
 import BaseHead from "../../components/BaseHead.astro";
 import Footer from "../../components/Footer.astro";
 import Header from "../../components/Header.astro";
-import { getCollection } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import FormattedDate from "../../components/FormattedDate.astro";
 
 const SERIES_SLUG = "parenting-long-reads";
@@ -17,6 +17,9 @@ const posts = (await getCollection("blog"))
 		if (partA !== partB) return partA - partB;
 		return a.data.pubDate.valueOf() - b.data.pubDate.valueOf();
 	});
+
+const introEntry = await getEntry("blog", "parenting-long-reads/intro");
+const { Content: IntroContent } = introEntry ? await introEntry.render() : { Content: null };
 ---
 
 <!doctype html>
@@ -51,7 +54,7 @@ const posts = (await getCollection("blog"))
 			}
 
 			.intro {
-				font-size: 18px;
+				font-size: 16px;
 				line-height: 1.8;
 				color: #404040;
 			}
@@ -117,17 +120,17 @@ const posts = (await getCollection("blog"))
 			<section class="page">
 				<h1>{SERIES_TITLE}</h1>
 				<div class="intro">
-					<div class="placeholder">
-						<p><strong>Series intro placeholder.</strong></p>
-						<p>
-							Use this page to explain why the series exists, how you are using
-							ChatGPT in the drafting process, and what readers should expect
-							from the posts that follow.
-						</p>
-						<p>
-							Replace this text with your own introduction when you are ready.
-						</p>
-					</div>
+					{IntroContent ? (
+						<IntroContent />
+					) : (
+						<div class="placeholder">
+							<p><strong>Series intro placeholder.</strong></p>
+							<p>
+								Add `src/content/blog/parenting-long-reads/intro.md` to provide
+								the introduction content for this page.
+							</p>
+						</div>
+					)}
 				</div>
 
 				<div class="archive">

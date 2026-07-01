@@ -8,9 +8,11 @@ export async function GET(context) {
 		title: SITE_TITLE,
 		description: "Recent content written by Tom Meadon",
 		site: context.site,
-		items: posts.map((post) => ({
+		items: posts
+			.filter((post) => post.data.draft !== true && post.data.hideFromLists !== true)
+			.map((post) => ({
 			...post.data,
 			link: `/blog/${post.slug}/`,
-		})),
+			})),
 	});
 }
