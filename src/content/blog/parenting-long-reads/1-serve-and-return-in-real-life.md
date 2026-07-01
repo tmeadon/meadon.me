@@ -4,9 +4,9 @@ title: "Serve and return in real life"
 description: "How small back-and-forth moments help young children learn language, trust, emotions, and attention."
 pubDate: 2026-07-01T08:00:00Z
 draft: false
-tags:
-  - parenting
-  - child-development
+seriesSlug: parenting-long-reads
+seriesTitle: Parenting Long Reads
+seriesPart: 1
 ---
 
 There is a phrase in child development that sounds more technical than it really is: **serve and return**.
