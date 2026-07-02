@@ -11,8 +11,8 @@ export async function GET(context) {
 		items: posts
 			.filter((post) => post.data.draft !== true && post.data.hideFromLists !== true)
 			.map((post) => ({
-			...post.data,
-			link: `/blog/${post.slug}/`,
+				...post.data,
+				link: `/blog/${post.id}/`,
 			})),
 	});
 }

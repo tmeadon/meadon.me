@@ -159,7 +159,7 @@ function getSummary(body: string): string {
 						<section class="item">
 							<div>
 								<h1 class="title">
-									<a href={`/blog/${post.slug}/`}>
+									<a href={`/blog/${post.id}/`}>
 										{post.data.title}
 									</a>
 								</h1>
@@ -170,7 +170,7 @@ function getSummary(body: string): string {
 							<div
 								class={post.data.seriesSlug ? "summary summary--series" : "summary"}
 							>
-								{getSummary(post.body)}
+								{getSummary(post.body ?? "")}
 							</div>
 							{post.data.seriesSlug && (
 								<div class="series">

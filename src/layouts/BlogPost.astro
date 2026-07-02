@@ -24,7 +24,7 @@ const {
 const showSeriesInfo = Boolean(seriesSlug);
 const showDisclaimer = showSeriesInfo && seriesDisclaimer !== false;
 
-const textOnPage = toString(fromMarkdown(Astro.props.body));
+const textOnPage = toString(fromMarkdown(Astro.props.body ?? ""));
 const { text: readingTime, words } = getReadingTime(textOnPage);
 ---
 
